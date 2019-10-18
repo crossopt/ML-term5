@@ -1,0 +1,94 @@
+\chapter{Ensemble Methods}
+
+{\sf Ensemble method is just uniting the outputs of several classifiers into one. So let's say we have the three clasifiers (in that case you already familiar with KNN and Desicion Trees, you will be familiar with Support Vector Machines in a couple of lectures). We have three clasifiers and they have different outputs for different class in your space. You can merge those predictions into the one and have a unified answer. The simple way to do it is called voting.}
+
+\section{Voting}
+
+ The voting can be hard or soft; the first one when we just count the number of votes, for example, if I have five trees and most of them get class A as an answer, so my answer will be A class. If we have the even number of trees and the half of them say <<Сlass A is the answer>> and others say <<Class B is the answer>>, we have to deal with it by taking into account where they are not, you want the Higher Presicion or Higher Recall or just piking the classes in alphabetical order (the last one is the way it is done in Scikit-learn, so if you use this package, be aware of that). You can work around it by having an odd number of classifiers. Soft voting takes into account how sure the classifier in this desicion. For example, two classifiers get pair (0.1, 0.9) as an answer (0.1 is the probability of class A, 0.9 is the probability of class B) and three classifiers says <<Not sure>> (pair (0.51, 0.49)). The hard voting will give us class A as an answer (because last three get class A), however you see that that three trees don't actually give as an answer, because (0.51, 0.49) is so close to the neutral answer (0.5, 0.5). In soft voting you either end up the points for each class of the probablities, or you multiply, or you add, and then you can take an answer.
+
+\section{Random Forest}
+
+The one of the best algotithms which utilizes the voting system is called Random Forest, and just from the name of own you can guess that the classifiers are trees, but what makes it random? It is a sampling strategy. We only have our dataset, we don't have all the data points but let's simulate sampling from the general data by sampling from the dataset. And now let's build a tree for each sample and this will helps us find a noise. [Забегая вперед: мы строим каждое дерево не на всем объеме данных, а на какой-то его части. Эту часть мы будем выбирать исходя из некоторых весов точек. Сами веса при этом меняются после каждого построения дерева. Еще можно брать все точки, а веса как-то учитывать при построении деревьев.]\\
+The greatest thing about random forest is the more trees you have the better random forest is: there is no owerfitting over the number of trees. So there are sampling strategies we mostly use the combination of bagging and random subspaces but let's just go through all of them.
+
+\subsubsection*{Pasting}
+
+Pasting is a simple sampling: let's take out of $N$ points $K$ random with no repeats.
+
+\subsubsection*{Bagging (bootstrap agregating)}
+
+The bagging (also bootstrap agregating) is a statistical term means the situation when you take the dataset of a sample with the same size but with repeats. Let's say we have the dataset with some features and two classes of the points from the dataset. Also we have weights for all points. That means that when we end up the error we multiply an error of every point by the weight of that point. The thing we gonna do the most today is manipulate that weight. \\
+Let's imagine we want to take the points with repeats. If the sampling weights are the same, you can just take a random point. If the sampling weights are different and you want to sample with those weights, you can do the thing we did when we thought about how to sample in k-means$++$ algorithm. <...> \\
+So you can use some weights in your classifier: when you build a tree, for example, you use the Gini formula ($\sum_{y\in Y}\frac{1}{|X|}\cdot|x: y(x) =y|\cdot|x: y(x) \ne y|$) but instead of counting the number of points you can add up their weights. There are different strategies for sampling; you can pick points according to the probability or you can just use this probability as your weights in your impurity calculation. Also instead of taking random samples of $N$ we can just assign a random numbers as weights and the best thing approximates bootstraping is a Poisson distribution so you can just select random numbers of the Poisson distribution and then use those numbers as weights in your impurity calculation.
+
+\subsubsection*{Random subspaces}
+
+The random subspaces is a way to try to randomize it and do a good work around noise anymore. We don't take random samples but rather we take random features so let's just use some subspace of features and random patches is both. So we use both random sample and random feature. Now you can natively calculate what is called feature importanse: if you want to now how important is your feature to the algorithm, you can build many trees and you can just calculate the number of trees that feature participates in. 
+
+\subsubsection*{Extremely randomized trees}
+
+Extremely randomized trees: instead of going over all the thresholds, over all the features, you can just say <<Ok, let's pick a hundred random thresholds and then pick the best>>. It doesn't work by itself, so if you want to construct one tree you will construct a really bad tree. However if you want to construct a forest, that not a bad idea. You can construct a good forest with extremly randomized trees.\\
+{\it <Some talk about how random forests are good.>}\\
+{\it <A meme slide about bootstraps and Munchausen...>}
+
+\section{Boosting Algorithms}
+
+Random forests constructs each tree basicaly independently, which is good because we can parellelize it. However, let's say we construct our first tree and it gives us a realy good answer with only a couple of problem points. In that case we would not want the next tree to be random, we would rather want the next tree to take into account the results of the first tree. The algorithms what do that are called Boosting Algorithms. It is important to know that we don't actually need to build a deep trees. So in the random forest we prefer to use trees with depth 5 or 6, and in adaptive boosting we use stumps (trees with only two leaves). In gradient boosting we use trees with depth 3 or 4. 
+
+\subsubsection*{Adaptive Boosting}
+
+So we have our dataset and the first thing we do is we construct the first classifier that gives us the answer. <...>\\
+At the first step we do the weights is uniform, so every point has the weight $D_1(i)=\frac{1}{N}$. Then you build a tree to minimize error $E_t = \sum_{i=1}^N D_t(i) \cdot E(h_t(x_i), y_i)$ [в простом варианте $E(h_t(x),y) = 1$, если не угадали класс и $0$, если угадали]. So you just select the best threshold of all features and then you assign the weight $\alpha_t=\frac{1}{2}\ln(\frac{1-E_t}{E_t})$ for that tree. {\it <A little description of this function and how it helps us>} Now you need to recalculate weights:
+$$\begin{cases}
+D_{t+1}(i) = D_t(i)e^{\alpha_t}&\text{for incorrectly classified points,}\\
+D_{t+1}(i)=D_t(i)e^{-\alpha_t}&\text{for correctly classified points.}
+\end{cases}$$
+Now you have the new sampling weights and you need to repeat the process, creating a new trees. You should stop if you don't have any improvement in your impurity, when you take into account the weights. The final hypothesys suggests the some number (hard voting) or the some number with coefficients (soft voting).\\
+{\it <A slide with an example>}
+
+\subsubsection*{Gradient Boosting}
+
+When you want to get the best answer for your table data (not structured data like sounds, text, pictures etc) the best thing you can do is the gradient boostring.
+\begin{displayquote}
+  {\sf \glqq I think everyone sucks at explaining gradient boosting algorythms. Especially the authors of the gradient boosting algorithms.\grqq
+  \begin{flushright}
+    A.A. Shpilman
+  \end{flushright}}
+\end{displayquote}
+It is one of most things that it is hard to understand and not hard but not easy to implement. It works, it has math behind it, but it's hard to understand why it works. There will be two explanations: one easy and one hard.
+\begin{enumerate}
+  \item[Easy:] This is the general formula for the gradient boosting:
+  $$H_{t+1}(x)=H_t(x)+h_{t+1}(x)\to y \Rightarrow h_{t+1}(x)\to y - H_t(x)$$
+  It is looks like the gradient descent. {\it <A little meeting with the gradient descent>} So we again build trees one by one, but we don't use stumps anymore. We use trees with the depth 3 (or 4, or 5, smth like that) and we will use regression, not the classification. So your tree predicts the numbers written in leaves [$H_t(x)$ -- число, записанное в листе, в котором <<лежит>> точка $x$, в дереве $t$]. How do we get the number in a leaf? We find average of all points that end up in this leaf [под суммированием точек подразумевается суммирование чисел, которыми мы обозначили классы точек, например для бинарной классификации это 1 и -1]. {\it <A slide with an example>} To get the next tree we need to subtract the number of each leaf of the previous tree from the points in this leaf and then we have the new y's [$h_{t+1}(x)$, новые классы точек]. <...> And then at some point you stop. That will give us the gradient booster: you take into account every new classifier, try to approximate the residual error and then you build the answer. The thing we noticed right away is that this way is bad and we need to have some learning rate [learning rate -- это коэффициент $\alpha$ в выражении $H_{t+1}=H_t(x)+\alpha h_{t+1}(x)$]. So we still fit the tree to the residual but we add it with some learnig rate $\alpha$ what is usually around 0.01--0.1. Why it works better? No one knows, this is a purely experimental result. {\it <Some intuition about this experimental result>} And the one more important thing is that usually gradient boosting starts with the first tree is just one leaf with the average, so you can just subtract the average right away. It is just centering the data. So again, gradient boosting, for just a regression, regression the error, it is the mean square error: $$MSE = \frac{1}{N}\sum(y-H_t(x))^2$$ <...> So we build the tree to minimize that error and for each leaf we define the weight is just the mean of all the values in that leaf. Simple. Works. Regression is very simple in terms of gradient boosting.\\
+  {\it <Some talk about libraries. I'm not enough motivated to recognize that speech.>}
+  \item[Hard:] What to do when it is not a simple regression, and we actually want to add some regularisation as well and that is where the complicated explanation comes in. So again:
+  $$H_t=H_{t-1}(x)+h_t=\sum\limits_{j=1}^t h_j(x)$$
+  In every step we want to calculate the $h_t(x)$. Also we want to minimize the error $E_t$:
+  $$E_t=\sum\limits_{i=1}^{N}L(H_t(x_i),y_i) + \sum\limits_{j=1}^t \Omega(h_j)$$
+  In our regression example the function $L$ is just a MSE. Also we have some regularization term $\sum_{j=1}^t \Omega(h_j)$. $\Omega(h_t)$ is usually just the number of leaves of a tree $t$.
+  $$E_t=\ldots=\sum\limits_{i=1}^{N}L(H_{t-1}(x_i) + h(x_i),y_i) + \sum\limits_{j=1}^{t-1} \Omega(h_j)+\Omega(h_t)=$$
+  $$=\sum\limits_{i=1}^N\left(2(H_{t-1}(x_i)-y_i)h_t(x_i)+(h_t(x_i))^2\right)+\Omega(h_t)+const$$
+  In this formula we already know anything except $h_t$ and $\Omega(h_t$ what we are going to find in some steps in the gradient boosting process.\\
+  In the general case $L$ is some differentiable function and you have:
+  $$E_t=\sum\limits_{i=1}^N\left(L(H_{t-1}(x_i), y_i)+u_ih_t(x_i)+\frac{1}{2}v_i(h_t(x_i))^2\right)+\Omega(h_t)+const$$
+  where
+  $$u_i=\partial_{H_{t-1}(x_i)}\left(L(H_{t-1}(x_i), y_i)\right)$$
+  $$v_i=\partial_{H_{t-1}(x_i)}^2\left(L(H_{t-1}(x_i), y_i)\right)$$
+  In a case of regression: $u_i=2(H_{t-1}(x_i)-y_i)$, $v_i=2$. \\
+  So as long as your error function is differentiable you can calculate a function what you are trying to approximate (like this: $L(H_{t-1}(x_i), y_i)+u_ih_t(x_i)+\frac{1}{2}v_i(h_t(x_i))^2$; you want to minimize $\sum_{i=1}^N \left(u_ih_t(x_i)+\frac{1}{2}v_i(h_t(x_i))^2\right) + \Omega(h_t)$).\\
+  The regulirasation term $\Omega(f)$ in the case of extreme gradient boosting is the sum of all the leaves [слагаемое $\gamma M$, где $\gamma$ какая-то константа] plus sum of all the weights [$w_j$ -- число в листе $j$]:
+  $$\Omega(f)=\gamma M+\frac{1}{2}\lambda\sum\limits_{j=1}^{M}w_j^2$$
+  $$E_r=\sum\limits_{i=1}^{N}\left(u_iw_{q(x_i)}+\frac{1}{2}v_i(w_{q(x_i)})^2\right)+\gamma M + \frac{1}{2}\lambda\sum\limits_{j=1}^{M}w_j^2$$
+  where $q(x_i)$ is the leaf of $x_i$.\\
+  Then you can group that formula by leaves:
+  $$E_t=\sum\limits_{j=1}^{M}\left(\sum\limits_{q(x_i)=j}u_iw_j+\frac{1}{2}\left(\sum\limits_{q(x_i)=j}v_i+\lambda\right)w_j^2\right)+\gamma M=\sum\limits_{j=1}^M\left(U_jw_j+\frac{1}{2}(V_j+\lambda)w_j^2\right)+\gamma M$$
+  where $U_j=\sum\limits_{q(x_i)=j}u_i$ and $V_j=\sum\limits_{q(x_i)=j}v_i$ [$u_i$ и $v_i$ -- это те производные, что мы считали выше].\\
+  So you have function $E_t$ to minimize and this is solution:
+  $$w_j^{opt}=-\frac{U_j}{V_j+\lambda},\ E_t^{opt}=\gamma M-\frac{1}{2}\sum\limits_{j=1}^M\frac{U_j^2}{V_j+\lambda}$$
+  This solution gives us the optimal weights to minimize our error when we constructing a tree. The Gain corresponding to that error is:
+  $$Gain = \frac{1}{2}\left[\frac{U_{left}^2}{V_{left}+\lambda}+\frac{U_{right}^2}{V_{right}+\lambda}-\frac{(U_{left}+U_{right})^2}{V_{left}+V_{right}+\lambda}\right]-\gamma$$
+  So it is how you pick the threshold. The gradient boosting still goes over all thresholds and picks the best. But now you just use this Gain formula. <...>
+\end{enumerate}
+The thing you need to understand is we didn't actually change anything between constructing the trees in the gradient boosting (but we can if we want to make some points more important than the others).\\
+{\it <Smth about CatBoost>}\\
+And the one important thing is that the learning rate ($\alpha$ in $H_{t+1}=H_t(x)+\alpha h_{t+1}(x)$) scales the answer of the tree.

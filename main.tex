@@ -1,0 +1,97 @@
+\documentclass[a4paper]{report}
+
+\usepackage[12pt]{extsizes} % Нестандартный размер кегля
+\usepackage[russian]{babel} % Правильные переносы слов в конце строки
+\usepackage[utf8]{inputenc} % Кодировка файла -- utf8
+\usepackage{amsmath, amssymb} % Математические символы
+\usepackage{fancyhdr}
+\usepackage[usenames]{color}
+\usepackage{colortbl}
+\usepackage{lastpage}
+\usepackage{enumitem} % Расширенные перечисления
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{csquotes} % Оформление цитат
+\usepackage[document]{ragged2e}
+\usepackage{graphicx}
+\graphicspath{{pics/}} % Узакываем путь до картинок
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+
+\voffset=-20mm
+\textheight=250mm
+\hoffset=-20mm
+\textwidth=180mm
+\headsep=12pt
+\footskip=40pt
+
+\pagestyle{empty}
+\cfoot{\large \thepage \ of \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancypagestyle{fchapter}{
+  \lhead{}
+  \rhead{}
+  \cfoot{\large \thepage \ of \pageref*{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0.4pt}
+}
+\fancypagestyle{fstyle}{
+  \headheight=30pt
+  \footskip=30pt
+  \lhead{\Huge \bf ML}
+  \rhead{\large \leftmark}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0.4pt}
+}
+\pagestyle{fstyle}
+
+\renewcommand{\section}[1]{
+  \refstepcounter{section}
+  \vspace*{2em}
+  \addcontentsline{toc}{section}{#1}
+  {\bf\Large #1}
+  \vspace*{1em}
+}
+\titleformat{\chapter}[hang]
+  {\Huge}{Lecture \thechapter:}{1em}
+  {\thispagestyle{fchapter}}
+\renewcommand{\chaptermark}[1]{
+  \markboth{Lecture~\thechapter: #1}{}
+}
+
+\addto\captionsrussian{
+  \renewcommand{\contentsname}{Contents}
+}
+\titlecontents{chapter}[0em]{\vskip 0.5ex}{\bf\large}{\bf\large}{}
+
+\definecolor{sapphireblue}{rgb}{0.06,0.32,0.73}
+\hypersetup{
+    colorlinks,
+    linkcolor=sapphireblue,
+    urlcolor=sapphireblue,
+}
+
+
+\begin{document}
+
+\begingroup
+  \hypersetup{linkcolor=black}
+  \tableofcontents
+\endgroup
+
+\input{1.tex}
+
+\input{2.tex}
+
+\input{3.tex}
+
+\input{4.tex}
+
+\input{5.tex}
+
+\end{document}
