@@ -141,7 +141,7 @@ $$B(N,k)\le B(N-1,k)+B(N-1,k-1)\le\sum\limits_{i=0}^{k-1}\binom{N-1}{i}+\sum\lim
 \subsubsection*{VC-dimention}
 
 $d_{VC}(H)$ for hypotheses type $H$ is the maximum number $N$ such that $m_H(N)=2^N$. If $k$ is the breakpoint, $d_{VC}=k-1$, so:
-$$m_H(N)=B(N,k)\le\sum\limits_{i=0}^{k-1}\binom{N}{i}=\sum\limits_{i=0}^{d_{VC}}\le N^{d_{VC}}+1$$
+$$m_H(N)\le B(N,k)\le\sum\limits_{i=0}^{k-1}\binom{N}{i}=\sum\limits_{i=0}^{d_{VC}}\le N^{d_{VC}}+1$$
 Why is this important? Because we can pull that in the Vapnik-Chervonenkis inequality and guarantee that we don't overfit in a big dataset. And the number $d_{VC}$ shows the effective complexity of a model.
 
 \subsubsection*{VC-dimention for perceptron}
