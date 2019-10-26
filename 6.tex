@@ -104,13 +104,33 @@ This way is called the L2 regularization or weight decay.\\
 
 \subsubsection*{Early stopping}
 
-The another way in regularization is catching the moment of overfitting. So this is a typical graph what shows gain between errors on the validation dataset and training dataset (the x axis is the number of epochs):\\
-{\it <Pic>}\\
+\begin{wrapfigure}{r}{0.4\linewidth}
+  \vspace{-1.3cm}
+  \begin{center}
+    \includegraphics[width=\linewidth]{6a.png}
+  \end{center}
+  \vspace{-0.3cm}
+  \caption*{(6.1) Early stopping}
+  \vspace{-1.5cm}
+\end{wrapfigure}
+The another way in regularization is catching the moment of overfitting. So this is a typical graph [pic.~6.1] what shows gain between errors on the validation dataset and training dataset (the x axis is the number of epochs).\\
 The error on the training dataset is always decrease, but error in the validation dataset in some point starts to increase. And at that point we want to stop (remember the weights of the network in that point).
 
 \subsubsection*{Dropout}
 
 Dropout is a direct way to preventing networks from memorizing the dataset. We just turn of some (50\%, for example) random neurons for every layers in every patch. The turned of neuron outputs 0. In that way the network will try to learn general features rather than specific pathways, because each pathway can be turned off.\\
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[l]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{6b.png}
+    \caption*{(6.2) Standart neural net}
+  \end{subfigure}
+  \hspace{2cm}
+  \begin{subfigure}[r]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{6c.png}
+    \caption*{(6.3) After applying dropout}
+  \end{subfigure}
+\end{figure}
 When we apply this network at some task we need to turn on all the neurons.
 
 \subsubsection*{Data augmentation}
