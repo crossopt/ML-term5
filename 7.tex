@@ -1,11 +1,10 @@
 \chapter{Deep Learning for Images}
 
-{\sf %2012 is the year of deep learning revolution. There was a ImageNet competiton when AlexNet won by a huge margin with 15\% error (the result in 2011 were like 1st place had 27\%). AlexNet is the first deep network that proved to be so much ahead of everything else, that at that point people start do all with deep learning. How did they do it?\\
-Let's imagine we have a fully connected network for image recognision and the problem is the bigger network we get the more connections the network has (more prompt of overfitting the network has, more computing pover needs for trainig). The main idea of deep learning is imposing a structure of that network. Rather than have a fully connected network we can have a structured network with less weights but more effective for solving specific task.}
+{\sf Let's imagine we have a fully connected network for image recognision and the problem is the bigger network we get the more connections the network has (more prompt of overfitting the network has, more computing pover needs for trainig). The main idea of deep learning is imposing a structure of that network. Rather than have a fully connected network we can have a structured network with less weights but more effective for solving specific task.}
 
 \section{Convolution}
 
-Deep leaning was enspired by biology. In the early 1950's professors David Hubel and Torsten Wiesel made \href{https://youtu.be/IOHayh06LJ4}{series of experiments} on cat brain. They tried to answer how does a cat sees the world around it, how visual cortex works. The experiments were like putting a cat in some mechanism, closing one eye of the cat that only annoys input from one eye. Then they drill a little whole in it's head and put an electrode at different place of the visual cortex to see how specific neurons reacts to specific visual stimulas. The cat saw some lines. So they found that some neuron best detects lines with one angle, while some others detects lines with another angle [\href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1363130/pdf/jphysiol01298-0128.pdf}{ссылка} на статью для интересующихся].
+Deep leaning was enspired by biology. In the early 1950's professors David Hubel and Torsten Wiesel made \href{https://youtu.be/IOHayh06LJ4}{series of experiments} on cat brain. They tried to answer how does a cat sees the world around it, how visual cortex works. The experiments were like putting a cat in some locking mechanism, closing one eye of the cat that only annoys input from one eye. Then they drill a little whole in it's head and put an electrode at different place of the visual cortex to see how specific neurons reacts to specific visual stimulas. The cat saw some lines. So they found that some neuron best detects lines with one angle, while some others detects lines with another angle [\href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1363130/pdf/jphysiol01298-0128.pdf}{ссылка} на статью для интересующихся].
 
 \subsubsection*{Detecting lines}
 
@@ -32,14 +31,44 @@ The another operation what we use to decrease the complexity is called poolnig. 
 The way to made your calculations looks nicely is the padding your image with zeros. And then you can just follow the center of yoru convloution filter what are going over all pixels of initial image.
 
 \section{Examples of Deep Neural Networks}
+\vspace{-0.6cm}
+\subsubsection*{LeNet-5}
+
+The one of the first deep learning network. It was created in 1998 and use all the algorithms and computer vision technics in that time. It used only 61470 weights. After that it was a deep learning winter (except the several labs across the world) until in 2012 is there was deep learning revolution.\\
+{\it <Pic>}
 
 \subsubsection*{AlexNet}
 
+In 2012 there was a ImageNet competiton when AlexNet won by a huge margin with 15\% error (the result in 2011 were like 1st place had 27\%). This is the first deep network that proved to be so much ahead of everything else, that at that point people start do all with deep learning.\\
+{\it <Pic>}
+AlexNet is a deep neural network what has 100,207,632 weights and it uses a GPU's calculations (what gives to this net success in 2012). Also it has two parts each individualy calculates on own GPU. So there are some features of this net:
+\begin{enumerate}[label=$\bullet$]
+  \item Scales all images to $266\times256$, then takes random $224\times224$ pathes and mirrors them.
+  \item Substracts average pixel value from each pixel.
+  \item ReLU ($\max(0,x)$).
+  \item Dropout 0.5.
+  \item Batch size 128, SGD with momentum 0.9 (momentum is how much of the previous gradient descent steps you keeps), L2 weight decay ($\lambda=0.0005$).
+\end{enumerate}
+The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely color-specific. This kind of specialization occurs during every run and is independent of any particular random weight initialization (modulo a renumbering of the GPUs) [\href{https://www.nvidia.cn/content/tesla/pdf/machine-learning/imagenet-classification-with-deep-convolutional-nn.pdf}{ссылка} на статью с более подобным описание для интересующихся].\\
+Today we don't use the AlexNet, we use one of three things: VGGNet, Inception network or ResNet.
+
 \subsubsection*{VGGNet}
 
-\subsubsection*{GoogleNet}
+VGGNet is a very deep convolutional network (VGG is the lab what invented it). The main idea of those to skip to all the convolutions to be $3\times3$ and replace widely convolutions by more layers of $3\times3$ convolutions. It works because several layers of $3\times3$ have less weights than big initial covolution. So it saves weights and it's very deep (but not heavy computantionaly). VGGNet is still used today in case of missing Google resources.
+
+\subsubsection*{Inception network}
+
+But is we have Google resources we can do something more complex. There are two main ideas of Inception network (it is named after the self-titled movie). The first is using $1\times1$, $3\times3$, $5\times5$ convolutions to one layer and then concatenate the results. The second idea is to use $1\times1$ convolutions to resize the filter. So there are inception modules:\\
+{\it <Pics>}\\
+And there are Inception network (also it named GoogLeNet):\\
+{\it <Pic>}
 
 \subsubsection*{ResNet}
+
+As you can see the GoogLeNet has multiple outputs. The reason is the information is lost the dipper you go -- it is nice to have information from the different layers. But instead of it we can do additional information: add the output from the previous layer to the output of next layer. It is called residual connection [pic.]. Also we have highway connection [pic.]: when you train in separate neuron network to determinate how much of the output we add and how much of the previous input we keep.\\
+{\it <Pics>}\\
+So this ideas used in ResNet. ResNet is the widely used deep learning network. It has error rate only 3.57\%. However, if you want have less weights, you'll go to VGG: it still works well (now it has error rate 6.8\%).\\
+The problem is that human error rate is near 5\%. And error rate less than 5\% means the training on noice because all image dataset created by humans. So after the 2015 image networks changed from image classification was replaced by object detection.
 
 \section{Image Augmentation}
 
