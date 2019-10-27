@@ -70,6 +70,21 @@ As you can see the GoogLeNet has multiple outputs. The reason is the information
 So this ideas used in ResNet. ResNet is the widely used deep learning network. It has error rate only 3.57\%. However, if you want have less weights, you'll go to VGG: it still works well (now it has error rate 6.8\%).\\
 The problem is that human error rate is near 5\%. And error rate less than 5\% means the training on noice because all image dataset created by humans. So after the 2015 image networks changed from image classification was replaced by object detection.
 
-\section{Image Augmentation}
+\section{Technics in Image Analysis}
+\vspace{-0.6cm}
+\subsubsection*{Image augmentation}
 
-\section{Transfer Learning and Finetuning}
+The data is almost never enough. There is some ways to make your dataset bigger:
+\begin{enumerate}[label=$\bullet$]
+  \item Flip image. Be carefull, some flipped objects can be from another class: car upside down in come cases may be the trash.
+  \item Rotate image. When you rotate, for example, on 45 degrees you may interpolate the result: fill the corners using part of initial picture [pic.] or using the edge pixels of rotated image [pic.]. 
+  \item Crop image. This is very powerfull because can take a lot of images.
+  \item Scale image.
+  \item Use Gaussian noice. After using a noice it becomes harder to overfit.
+  \item Shift the colors by some constant. Good method of color shifting is transfering at the other color space and then shiffting.
+\end{enumerate}
+
+\subsubsection*{Transfer Learning and Finetuning}
+
+If image augmentation doesn't work, you have a transfer leaning. It is the most imprortant technic you can use on the image analysis. For example, someone has trained on ResNet and published all of it. What are the weights? Just a culculation of an image features. It doesn't matter what featers they are: dogs, cars etc. It is just image features. So now you can train your deep network on big dataset, for example, ImageNet, then you can take the part that calculates the feature, freeze it and add your small part for your specific task and just train that. It works wonderfully for any task. It works because there are so many features in the frozen part. It doesn't matter that you don't utilize some of them.\\
+If you have few compute power and you have many data you can use finetuning. The finetuning like transfer learning but you don't fix the weights and you still train (finetune) to your task. Sometimes it helps but almost over it is overfitting becase you transfer with net millions and millions of images.
