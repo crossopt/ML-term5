@@ -1,1 +1,46 @@
 \chapter{Deep Learning for Images}
+
+{\sf %2012 is the year of deep learning revolution. There was a ImageNet competiton when AlexNet won by a huge margin with 15\% error (the result in 2011 were like 1st place had 27\%). AlexNet is the first deep network that proved to be so much ahead of everything else, that at that point people start do all with deep learning. How did they do it?\\
+Let's imagine we have a fully connected network for image recognision and the problem is the bigger network we get the more connections the network has (more prompt of overfitting the network has, more computing pover needs for trainig). The main idea of deep learning is imposing a structure of that network. Rather than have a fully connected network we can have a structured network with less weights but more effective for solving specific task.}
+
+\section{Convolution}
+
+Deep leaning was enspired by biology. In the early 1950's professors David Hubel and Torsten Wiesel made \href{https://youtu.be/IOHayh06LJ4}{series of experiments} on cat brain. They tried to answer how does a cat sees the world around it, how visual cortex works. The experiments were like putting a cat in some mechanism, closing one eye of the cat that only annoys input from one eye. Then they drill a little whole in it's head and put an electrode at different place of the visual cortex to see how specific neurons reacts to specific visual stimulas. The cat saw some lines. So they found that some neuron best detects lines with one angle, while some others detects lines with another angle [\href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1363130/pdf/jphysiol01298-0128.pdf}{ссылка} на статью для интересующихся].
+
+\subsubsection*{Detecting lines}
+
+So if a cat sees with lines let's ask neural network to see with lines. The detection of lines at various shapes was already known at that point and it was done in convolutions. The convolution is just point wise multiplication and then addition it. You can see the green tensor what is our input image ang the yelow part of it is convolution filter and the red numbers are the values of this filter. What we do is we multiply each pixel value at this number and then we sum them up. So this convolution detects diagonal edges. The bigger number correspondes part of image with diagonal edge.\\
+So the parameters what we are trying to optimise are kernels (size of the filter) and strides (how large shift of the filter we use). You can see here how various convolutions detect various feature of the image:\\
+{\it <Pics>}\\
+
+\subsubsection*{Convolution layers}
+
+When you add them up into layers you have your level of feature increasing. First, if you have simple shapes detecting then you can have the more complex shapes that are some convolution of those features and then you can have even more complex shapes.
+
+What is important to understans that is still neurons, that there is still multiplication of preceptron input by weight. So all the math is still the same. When we back propagate the gradient we just some not over all neurons but over specific neurons. All neurons in one convolution layer have the same weight.
+
+First we have our input. It is a typical image: $224\times224\times3$ (3 because of color channels). It important to understand that it's called 2D convolution because it doesn't scan in depth.\\
+The next step is going with convolutions over all image and takse values what your filter outputs. And you have several different convolutions (every convolution has it's own filter). And what you get when you go with convolution over all picture you get your convolved feature or convolution map or your feature map. That black image with white edges of a deer is a convolution map. So you have set of some different maps and the next convolution layer looks at each map of the set like color channels (so it's still 2D convolution). So these are all convolutions and the application of these convolutions to an image will get us small channels. So the convolution image represents what that convolution will detect and so on.\\
+{\it <Pic>}
+
+\subsubsection*{Pooling}
+
+The another operation what we use to decrease the complexity is called poolnig. For example, if there is a clear signal on a some area of a feature map, then we just need a point with a signal because all the other points that are neighboring are probably are signaling the same object. So we just take the maximum and it's called the maximum pooling. Also in some cases you can take average (and you'll have average pooling).
+
+\subsubsection*{Padding}
+
+The way to made your calculations looks nicely is the padding your image with zeros. And then you can just follow the center of yoru convloution filter what are going over all pixels of initial image.
+
+\section{Examples of Deep Neural Networks}
+
+\subsubsection*{AlexNet}
+
+\subsubsection*{VGGNet}
+
+\subsubsection*{GoogleNet}
+
+\subsubsection*{ResNet}
+
+\section{Image Augmentation}
+
+\section{Transfer Learning and Finetuning}
