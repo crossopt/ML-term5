@@ -1,74 +1,71 @@
 \chapter{Deep Learning for Images}
 
-{\sf Let's imagine we have a fully connected network for image recognision and the problem is the bigger network we get the more connections the network has (more prompt of overfitting the network has, more computing pover needs for trainig). The main idea of deep learning is imposing a structure of that network. Rather than have a fully connected network we can have a structured network with less weights but more effective for solving specific task.}
+{\sf Let's imagine we have a fully connected network for image recognision and the problem is the bigger network we get the more connections the network has (more prompt of overfitting the network has, more computing pover needs for trainig). The main idea of deep learning is imposing a structure on that network. Rather than have a fully connected network we can have a structured network with less number of weights but more effective for solving specific task.}
 
 \section{Convolution}
 
-Deep leaning was enspired by biology. In the early 1950's professors David Hubel and Torsten Wiesel made \href{https://youtu.be/IOHayh06LJ4}{series of experiments} on cat brain. They tried to answer how does a cat sees the world around it, how visual cortex works. The experiments were like putting a cat in some locking mechanism, closing one eye of the cat that only annoys input from one eye. Then they drill a little whole in it's head and put an electrode at different place of the visual cortex to see how specific neurons reacts to specific visual stimulas. The cat saw some lines. So they found that some neuron best detects lines with one angle, while some others detects lines with another angle [\href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1363130/pdf/jphysiol01298-0128.pdf}{ссылка} на статью для интересующихся].
+Deep leaning was enspired by biology. In the early 1950's professors David Hubel and Torsten Wiesel made \href{https://youtu.be/IOHayh06LJ4}{series of experiments} on cat's brain. They tried to answer how cats see the world around them, how their visual cortex works. The experiments were putting a cat in some locking mechanism, closing one eye of the cat that only annoys input from one eye. Then they drill a little hole in it's head and put an electrode at different place of the visual cortex to see how specific neurons reacts to specific visual stimulus. The cat saw some lines. So they found that some neuron best detects lines with one angle, while some others detects lines with another angle [\href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1363130/pdf/jphysiol01298-0128.pdf}{ссылка} на статью для интересующихся].
 
 \subsubsection*{Detecting lines}
 
-So if a cat sees with lines let's ask neural network to see with lines. The detection of lines at various shapes was already known at that point and it was done in convolutions. The convolution is just point wise multiplication and then addition it. You can see the green tensor what is our input image ang the yelow part of it is convolution filter and the red numbers are the values of this filter. What we do is we multiply each pixel value at this number and then we sum them up. So this convolution detects diagonal edges. The bigger number correspondes part of image with diagonal edge.\\
+So if a cat sees with lines let's ask neural network to see with lines. The detection of lines at various shapes was already known at that point and it was done in convolutions. The convolution is just pointwise multiplication and then addition it. You can see [pic.] the green tensor what is our input image, the yellow part of it is convolution filter and the red numbers are the values of this filter. What we do is we multiply each pixel value at red number and then we sum them up. This convolution detects diagonal edges. The bigger number correspondes to a part of the image with a diagonal edge.\\
+{\it <Pic>}\\
 So the parameters what we are trying to optimise are kernels (size of the filter) and strides (how large shift of the filter we use). You can see here how various convolutions detect various feature of the image:\\
 {\it <Pics>}\\
 
 \subsubsection*{Convolution layers}
 
-When you add them up into layers you have your level of feature increasing. First, if you have simple shapes detecting then you can have the more complex shapes that are some convolution of those features and then you can have even more complex shapes.
-
-What is important to understans that is still neurons, that there is still multiplication of preceptron input by weight. So all the math is still the same. When we back propagate the gradient we just some not over all neurons but over specific neurons. All neurons in one convolution layer have the same weight.
-
-First we have our input. It is a typical image: $224\times224\times3$ (3 because of color channels). It important to understand that it's called 2D convolution because it doesn't scan in depth.\\
-The next step is going with convolutions over all image and takse values what your filter outputs. And you have several different convolutions (every convolution has it's own filter). And what you get when you go with convolution over all picture you get your convolved feature or convolution map or your feature map. That black image with white edges of a deer is a convolution map. So you have set of some different maps and the next convolution layer looks at each map of the set like color channels (so it's still 2D convolution). So these are all convolutions and the application of these convolutions to an image will get us small channels. So the convolution image represents what that convolution will detect and so on.\\
+If you have simple shapes detecting then you can have the more complex shapes detecting. You can get that complex shapes detecting by applying convolution to the features you get after you apply convolution first time. And so on. So now we have a several convolution levels. What is important to understand that there is still neurons, there is still multiplication of preceptron input by weight. So all the math is still the same. When we back propagate the gradient we just sum not over all neurons but over specific neurons because all neurons in one convolution layer have the same weight.\\
+Now let's imagine you have a typical image with size $224\times224\times3$ (3 because of color channels). It is called 2D convolution because it doesn't scan in depth. The next step is going over all image and take values what your filters outputs. And you have several different convolutions (every convolution has it's own filter). And what you get when you go with convolution over all picture is your convolved feature (or convolution map or your feature map). That black image with white edges of a deer is a convolution map. So you have set of some different maps and the next convolution layer looks at each map of the set like color channels (so it's still 2D convolution).\\
 {\it <Pic>}
 
 \subsubsection*{Pooling}
 
-The another operation what we use to decrease the complexity is called poolnig. For example, if there is a clear signal on a some area of a feature map, then we just need a point with a signal because all the other points that are neighboring are probably are signaling the same object. So we just take the maximum and it's called the maximum pooling. Also in some cases you can take average (and you'll have average pooling).
+The another operation what we use to decrease the complexity is called pooling. For example, if there is a clear signal on a some area of a feature map, then we just need a point with that signal because all the neightboring points probably are signaling the same. So we just take the maximum and it's called the maximum pooling. Also in some cases you can take average (and you'll have the average pooling).
 
 \subsubsection*{Padding}
 
-The way to made your calculations looks nicely is the padding your image with zeros. And then you can just follow the center of yoru convloution filter what are going over all pixels of initial image.
+Padding is one way to perform convolution. For example, we have an image of size $M\times N$ and a filter of size $(2K+1)\times(2K+1)$. Before start moving the filter, we resize the original image to $(2K+M)\times(2K+N)$, adding a frame with weight $K$, consisting of zeros.
 
 \section{Examples of Deep Neural Networks}
 \vspace{-0.6cm}
 \subsubsection*{LeNet-5}
 
-The one of the first deep learning network. It was created in 1998 and use all the algorithms and computer vision technics in that time. It used only 61470 weights. After that it was a deep learning winter (except the several labs across the world) until in 2012 is there was deep learning revolution.\\
+The one of the first deep learning network. It was created in 1998 and it use all the algorithms and computer vision technics of that time. Also it used only 61470 weights. After that network there was a deep learning winter: almost noone works with them (except the several labs across the world) until 2012.\\
 {\it <Pic>}
 
 \subsubsection*{AlexNet}
 
-In 2012 there was a ImageNet competiton when AlexNet won by a huge margin with 15\% error (the result in 2011 were like 1st place had 27\%). This is the first deep network that proved to be so much ahead of everything else, that at that point people start do all with deep learning.\\
-{\it <Pic>}
-AlexNet is a deep neural network what has 100,207,632 weights and it uses a GPU's calculations (what gives to this net success in 2012). Also it has two parts each individualy calculates on own GPU. So there are some features of this net:
+In 2012 there was a ImageNet competition when AlexNet won by a huge margin with 15\% error (the result in 2011 were like 1st place had 27\%). This is the first deep network that proved to be so much ahead of everything else, and after that people start do all with deep learning.\\
+{\it <Pic>}\\
+AlexNet is a deep neural network what has 100,207,632 weights and it uses a GPU's calculations (what made this net successful in 2012). Also it has two parts each calculated individually on its own GPU. So there are some features of this net:
 \begin{enumerate}[label=$\bullet$]
-  \item Scales all images to $266\times256$, then takes random $224\times224$ pathes and mirrors them.
+  \item Scales all images to $256\times256$, then takes random $224\times224$ batches and mirrors them.
   \item Substracts average pixel value from each pixel.
   \item ReLU ($\max(0,x)$).
   \item Dropout 0.5.
   \item Batch size 128, SGD with momentum 0.9 (momentum is how much of the previous gradient descent steps you keeps), L2 weight decay ($\lambda=0.0005$).
 \end{enumerate}
-The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely color-specific. This kind of specialization occurs during every run and is independent of any particular random weight initialization (modulo a renumbering of the GPUs) [\href{https://www.nvidia.cn/content/tesla/pdf/machine-learning/imagenet-classification-with-deep-convolutional-nn.pdf}{ссылка} на статью с более подобным описание для интересующихся].\\
+The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely color-specific. This kind of specialization occurs during every run and is independent of any particular random weight initialization (modulo a renumbering of the GPUs) [\href{https://www.nvidia.cn/content/tesla/pdf/machine-learning/imagenet-classification-with-deep-convolutional-nn.pdf}{ссылка} на статью с болеем подобным описание для интересующихся].\\
 Today we don't use the AlexNet, we use one of three things: VGGNet, Inception network or ResNet.
 
 \subsubsection*{VGGNet}
 
-VGGNet is a very deep convolutional network (VGG is the lab what invented it). The main idea of those to skip to all the convolutions to be $3\times3$ and replace widely convolutions by more layers of $3\times3$ convolutions. It works because several layers of $3\times3$ have less weights than big initial covolution. So it saves weights and it's very deep (but not heavy computantionaly). VGGNet is still used today in case of missing Google resources.
+VGGNet is a very deep convolutional network (VGG is the lab what invented it). The main idea is replace some layers of wide convolutions by more layers of $3\times3$ convolutions. It works because several layers of $3\times3$ have less weights than a big initial convolution. So it saves weights and it's very deep (but not heavy computantionaly). VGGNet is still used today in case of missing Google resources.
 
 \subsubsection*{Inception network}
 
-But is we have Google resources we can do something more complex. There are two main ideas of Inception network (it is named after the self-titled movie). The first is using $1\times1$, $3\times3$, $5\times5$ convolutions to one layer and then concatenate the results. The second idea is to use $1\times1$ convolutions to resize the filter. So there are inception modules:\\
+But is we have Google resources we can do something more complex. There are two main ideas of Inception network (it is named after the self-titled movie). The first is using $1\times1$, $3\times3$ and $5\times5$ convolutions in one layer and then concatenating the results. The second idea is to use $1\times1$ convolutions to resize the filter. {\it <How it resizes filters>} So there are inception modules:\\
 {\it <Pics>}\\
 And there are Inception network (also it named GoogLeNet):\\
 {\it <Pic>}
 
 \subsubsection*{ResNet}
 
-As you can see the GoogLeNet has multiple outputs. The reason is the information is lost the dipper you go -- it is nice to have information from the different layers. But instead of it we can do additional information: add the output from the previous layer to the output of next layer. It is called residual connection [pic.]. Also we have highway connection [pic.]: when you train in separate neuron network to determinate how much of the output we add and how much of the previous input we keep.\\
+As you can see the GoogLeNet has multiple outputs. The reason is the information is lost the deeper you go --- it is nice to have an information from the different layers. But instead of it we can do additional information: add the output from the previous layer to the output of next layer. It is called a residual connection [pic.]. Also we have a highway connection [pic.]: when you train in a separate neural network to determine how much of the output we add and how much of the previous input we keep.\\
 {\it <Pics>}\\
 So this ideas used in ResNet. ResNet is the widely used deep learning network. It has error rate only 3.57\%. However, if you want have less weights, you'll go to VGG: it still works well (now it has error rate 6.8\%).\\
-The problem is that human error rate is near 5\%. And error rate less than 5\% means the training on noice because all image dataset created by humans. So after the 2015 image networks changed from image classification was replaced by object detection.
+The problem of that error rate is that human error rate is near 5\%. And error rate less than 5\% means the training on noice because all image dataset created by humans. So after the 2015 image networks changed from image classification to object detection.
 
 \section{Technics in Image Analysis}
 \vspace{-0.6cm}
@@ -76,15 +73,16 @@ The problem is that human error rate is near 5\%. And error rate less than 5\% m
 
 The data is almost never enough. There is some ways to make your dataset bigger:
 \begin{enumerate}[label=$\bullet$]
-  \item Flip image. Be carefull, some flipped objects can be from another class: car upside down in come cases may be the trash.
-  \item Rotate image. When you rotate, for example, on 45 degrees you may interpolate the result: fill the corners using part of initial picture [pic.] or using the edge pixels of rotated image [pic.]. 
-  \item Crop image. This is very powerfull because can take a lot of images.
+  \item Flip image. Be carefull, some flipped objects can be from another class: car upside down in come cases may be a trash.
+  \item Rotate image. When you rotate, for example, on 45 degrees you may interpolate the result: fill the corners using a part of initial picture [pic.] or using the edge pixels of rotated image [pic.].\\
+  {\it <Pics>}
+  \item Crop image. This is very powerfull because it can get a lot of images.
   \item Scale image.
   \item Use Gaussian noice. After using a noice it becomes harder to overfit.
-  \item Shift the colors by some constant. Good method of color shifting is transfering at the other color space and then shiffting.
+  \item Shift the colors by some constant. Good method of color shifting is transfering at the other color space and shiffting after that.
 \end{enumerate}
 
 \subsubsection*{Transfer Learning and Finetuning}
 
-If image augmentation doesn't work, you have a transfer leaning. It is the most imprortant technic you can use on the image analysis. For example, someone has trained on ResNet and published all of it. What are the weights? Just a culculation of an image features. It doesn't matter what featers they are: dogs, cars etc. It is just image features. So now you can train your deep network on big dataset, for example, ImageNet, then you can take the part that calculates the feature, freeze it and add your small part for your specific task and just train that. It works wonderfully for any task. It works because there are so many features in the frozen part. It doesn't matter that you don't utilize some of them.\\
+If image augmentation doesn't work, you have a transfer leaning. It is the most imprortant technic you can use on the image analysis. For example, someone has trained on ResNet and published all of it. The weights of his neural net is just a calculation of some image features. It doesn't matter what featers they are: dogs, cars etc; you can train on them. So the fransfer learning is training deep network on a big dataset, for example, ImageNet, then taking the result of that calculations as features, freeze it and training your small part for your specific task on them. It works wonderfully for any task. It works because there are so many features in the frozen part. It doesn't matter that you don't utilize some of them.\\
 If you have few compute power and you have many data you can use finetuning. The finetuning like transfer learning but you don't fix the weights and you still train (finetune) to your task. Sometimes it helps but almost over it is overfitting becase you transfer with net millions and millions of images.
