@@ -11,7 +11,7 @@ Deep leaning was enspired by biology. In the early 1950's professors David Hubel
 So if a cat sees with lines let's ask neural network to see with lines. The detection of lines at various shapes was already known at that point and it was done in convolutions. The convolution is just pointwise multiplication and then addition it. You can see [pic. 7.1] the green tensor what is our input image, the yellow part of it is convolution filter and the red numbers are the values of this filter. What we do is we multiply each pixel value at red number and then we sum them up.\\
 \begin{figure}[h]
   \centering
-  \begin{tabular}{lccr}
+  \begin{tabular}{cccc}
     \includegraphics[width=0.2\linewidth]{7a.png} &
     \includegraphics[width=0.2\linewidth]{7b.png} &
     \includegraphics[width=0.2\linewidth]{7c.png} &
@@ -21,6 +21,7 @@ So if a cat sees with lines let's ask neural network to see with lines. The dete
     \multicolumn{4}{c}{(7.1) Convolution filter}
   \end{tabular}
 \end{figure}
+[В примере выше изображение было черно-белым: оно состояло из одного канала. Если же каналов больше, например, 3, то наш фильтр будет состоять уже из 3 слоев, необязательно одинаковых. Однако после прохода таким фильтром у изображения все равно останется один канал. Далее при указании размера фильтра я буду указывать размер одного слоя.]\\
 So the parameters what we are trying to optimise are kernels (size of the filter) and strides (how large shift of the filter we use). You can see here [pic. 7.2] how various convolutions detect various feature of the image:\\
 \begin{figure}[h]
   \centering
@@ -87,7 +88,7 @@ AlexNet is a deep neural network what has 100,207,632 weights and it uses a GPU'
   \item Dropout 0.5.
   \item Batch size 128, SGD with momentum 0.9 (momentum is how much of the previous gradient descent steps you keeps), L2 weight decay ($\lambda=0.0005$).
 \end{enumerate}
-The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely color-specific. This kind of specialization occurs during every run and is independent of any particular random weight initialization (modulo a renumbering of the GPUs) [\href{https://www.nvidia.cn/content/tesla/pdf/machine-learning/imagenet-classification-with-deep-convolutional-nn.pdf}{ссылка} на статью с болеем подобным описание для интересующихся].\\
+The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely color-specific. This kind of specialization occurs during every run and is independent of any particular random weight initialization (modulo a renumbering of the GPUs) [\href{https://www.nvidia.cn/content/tesla/pdf/machine-learning/imagenet-classification-with-deep-convolutional-nn.pdf}{ссылка} на статью с более подобным описание для интересующихся].\\
 Today we don't use the AlexNet, we use one of three things: VGGNet, Inception network or ResNet.
 
 \subsubsection*{VGGNet}
@@ -96,7 +97,7 @@ VGGNet is a very deep convolutional network (VGG is the lab what invented it). T
 
 \subsubsection*{Inception network}
 
-But is we have Google resources we can do something more complex. There are two main ideas of Inception network (it is named after the self-titled movie). The first is using $1\times1$, $3\times3$ and $5\times5$ convolutions in one layer and then concatenating the results. The second idea is to use $1\times1$ convolutions to resize the filter. {\it <How it resizes filters>} So there are inception modules:\\
+But is we have Google resources we can do something more complex. There are two main ideas of Inception network (it is named after the self-titled movie). The first is using $1\times1$, $3\times3$ and $5\times5$ convolutions in one layer and then concatenating the results. The second idea is to use $1\times1$ convolutions to made other filters flat. So there are inception modules:\\
 \begin{figure}[h]
   \centering
   \begin{subfigure}[l]{0.4\linewidth}
@@ -164,5 +165,5 @@ The data is almost never enough. There is some ways to make your dataset bigger:
 
 \subsubsection*{Transfer Learning and Finetuning}
 
-If image augmentation doesn't work, you have a transfer leaning. It is the most imprortant technic you can use on the image analysis. For example, someone has trained on ResNet and published all of it. The weights of his neural net is just a calculation of some image features. It doesn't matter what featers they are: dogs, cars etc; you can train on them. So the fransfer learning is training deep network on a big dataset, for example, ImageNet, then taking the result of that calculations as features, freeze it and training your small part for your specific task on them. It works wonderfully for any task. It works because there are so many features in the frozen part. It doesn't matter that you don't utilize some of them.\\
-If you have few compute power and you have many data you can use finetuning. The finetuning like transfer learning but you don't fix the weights and you still train (finetune) to your task. Sometimes it helps but almost over it is overfitting becase you transfer with net millions and millions of images.
+If image augmentation doesn't work, you have a transfer leaning. It is the most imprortant technic you can use on the image analysis. For example, someone has trained on ResNet and published all of it. The weights of his neural net is just a calculation of some image features. It doesn't matter what featers they are: dogs, cars etc; you can train on them. So the fransfer learning is training deep network on a big dataset, for example, ImageNet, then taking the result of that calculations as features, freeze it and training your small part for your specific task on output of the frozen part. It works wonderfully for any task, because there are so many features in the frozen part.\\
+If you have many data you can use finetuning. The finetuning is like transfer learning but you don't fix other network weights. And you still train (finetune) to your task. Sometimes it helps but almost over it is overfitting becase the fisrt part is designed for millions and millions of images.
