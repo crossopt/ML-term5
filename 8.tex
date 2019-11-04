@@ -1,0 +1,82 @@
+\chapter{Deep Learning for NLP}
+
+{\sf We already discussed deep learning networks in principal, we already discussed the applications of image proessing and convolutional neural networks. The last thing we are going to discuss is a deep learning for natural languge processing. We are going to take wider view not for only nlp but just for every sequence this sill works such as dna sequences etc. Emages were kind of easy in terms of image is already a vector or a tensor and you can put it in your network. But words are more complicated. What is the word? Word is some sequence of letters with meaning. And close sequences can have opposite meanings. What we want to do is we still wnat to have a vector what we can feed it into the neural network. And that is achived in word embeddings.}
+
+\section{Word Embeddings}
+
+Word embedding is creating vector representation for words, for dictuanary. And funny staff can happen. For example if we have created vector space using the method what we will discuss later, we can create the vector space than we can follow path. for example, we take word <<queen>> subtract the word <<woman>> and the word <<man>> and end up with the vector with the word <<king>>. And that is actually happening when we end that award saying with subtracting relationship or countries and capitals. Lets demonstrace how to work with that.
+
+\subsubsection*{word2vec (Google 2013)}
+
+To create the vector from word we need some task that this vector should achieve. For example we can create an language model with those vectors. I.e. we want to predict what is the surrounding words for a scpecific word. For example we say of, the pwobabillity of a target word from the sentle word is
+$$expression$$
+So after that we can calculate the loss function $J$:
+$$expression$$
+The $w_t$ words is the words in some neighborhood of word $w_c$. For example, in sentence <<Quick brown fox jumps over the lasy dog>> words <<quick>>, <<brown>>, <<jumps>> and <<over>> are neighbors for the word <<fox>>. As you can see, for neighbors you have a higher probability and for other words, for example, <<large>> and <<collider>> , you have a lower probability. So the thing is approach taking in word2vec method is let $f(w_t,w_c)=u_{w_t}^Tv_{w_c}$, where $u$ and $v$ are two-vector word embeddings. That multiplication over all neighboring words $w_t$  we calculate the likelyhood and the function and then we use gradient ascent (or descent, if you multiply loss functioon on $-1$) because we can easily calculate the derilivative. This way we will shift over all embeddings over all vectors to the correct one (that encreases the probabillity <<close words been close>>).
+
+\subsubsection*{CBOW \& Skip-gram}
+
+The two main methods are CBOW and Skip-gram. The first one is continious bag of words. We try to predict the word from the sum of the vectors of the surrounding words so we try to predict the center words from the contex, and the ship-gram is trying to predict the context from the center word [pic].\\
+{\it <Pic>}\\
+The main thing is why their doesn't called word2vec. The main thing is that both methods jump from summing up over all dictionary (what was in word2vec) to negative sampling. So instead summing up over all dictionary we can just select 5-10 negative samples.
+
+\subsubsection*{Fasttext}
+
+The good increase in embeddings was fasttext from Facebook. They moved from embedding just for word to having embedings from the word all possible n-gramms: <where> $\to$ <wh, whe, her, ere, re> (where < and > are starting and ending symbols). Now what this allows to do is to have embeddings for words what we did not encouter in our train points because the number of, for example. 3-gramms is much much less then then number of words in a dictionary. So every new word is just a sum of a n-gramms.
+
+%\subsubsection*{Semantic and syntatic relations}
+%
+%After you trained your vectors you can play with relationships:\\
+%{\it <Pic>}\\
+%The probling with those is a good performes so this are a just a comparasion there is methods of embaddings, this is a sizes of dataset and this is a size of a vectors. <...>
+
+\subsubsection*{Sentence embedding}
+
+It still the same, you are try to predict the next sentence from the vectors of the word or you can just use sentence as the word.
+This works in for not sentence data ??? work biovectors authors applied in better technics to protein sequences. So they separates in 3-gramms in 3 ways: when you start from a first letter, the second and the thisd:\\
+{\it <Pic>}\\
+So reduces their dimencionality and put them (3gramms) on map and paint them according to some chemical or phisical properties you can see that even you dont actually tell the computer that theese are proteins they hve letters correspondes to some chemical properties just from the text information itself, so just from the infromation how	do different letters come together in sentences it was able to extract the fisical or chemical information, for example, same size, volume is one the one place and chemical properties were arranged otherwise.
+
+You can use those vectors to have features. So now you have features for protheins that you did not have before. For example using those features can be correctly classified the family of the prothein. The important thing is you don't have to use neural networks after you get embeddings. After you use deep learning technics to obtain yout vectors you can use your vectors in trees or kNN etc.
+
+\section{Models in NLP}
+
+After you have word embeddings you need to do something woth them. And, for example, you can try to have mashine learning translation or text generation. The idea to use neural networks in natural language model. {\it <GPU talk>} The most used way to work with text is recurrent neural networks (RNN).
+
+\subsubsection*{RNN}
+
+{\it <Pic>}\\
+The H's are networks, x's are inputs and ys are outputs. Every time you not only produce an output but also some vector that you  fit in the next same network. And for two years everyone got excited about recursive neural networks [pic.] but not anymore.\\
+{\it <Pic>}\\
+So this is how do we the application of some neural network to an input. Now the problems show themselves quite quickly after we start using RNNs and the almost always have to do with wanishing of eploding gradients. Because we do that multiple times in reccurent fashien the gradient can either wanish. So if you multiple by the small number all the time you don't get the answer from the last weight to influence the first one or reverce fashion you can have to gradient exploring. So you multiple by something that the grater than one and then you can have the gradinet exploring and have the huge impact from that (last) to that (start) what is not reccomended. To fight that the LSTM was envented.
+
+\subsubsection*{LSTM, BiLSTM}
+
+LSTM is a long short-term memory network. Ok, we going to go in depth over that network in deep learning cource. What we need to know by now: it is the best choice one when you have a sequentional data. The important thing is LSTM decides on each step what to keep from previous step, what to keep from current input and what to keep from current output. How does LSTM looks in practice? It is a BiLSTM (bidirectional LSTM) [pic.]. Every word represented as a vector feeds into first LSTM network and than you have another LSTM network what goes into other direction: so you read the text from fron to back and from back to front and you feed outputs from the first network to the second.\\
+{\it <Pic>}\\
+This is common used LSTM structure because you get more ingormation from left to ight and from right to left. Then you concatenate both outputs and the result is a desicion for something. For example, if you want to generate the next word you can the softmax for the dictionary and then select the maximum.\\
+
+\subsubsection*{Attention}
+
+Attention is just adding a layer with the softmax after it for the inputs. For example, you have your inuts, you feed it into attention, the attention has the soft max after it and then you multiply that softmax vector (the property of the softmax vector is that all the numbers of the features sumed up to one). It is called attention because you have a unit of attention and you try to see how much attention does every inout gets. So you feed those inputs into your attention network, then you determine the attention, then you multiply and then you feed it into your network. Here you can see examples of disrtinution attention in a sentence:\\
+{\it <Pic>}\\
+So first is put the sentences into attention network than you multiply the output of the attention network by the input and then you feed it  into desicion network. This picture does not show that men is more important than woman! The attention has meaning only in one sentence: <<climbing>> has more attention then <<two>> because it has more meaning in that sentence. 
+
+\subsubsection*{Transformers}
+
+Many different networks were used in 2016. SQuAD is Stendford Question and Answering Dataset. How is it composed? You have a text and you have several questions that you have to answer to that text. If you guess the same questions that free humans guess then you have a corect answer. So SQuAD 3 years ago looks like that... This is how it looks today...What do those have all in common? Thy are all transformers.\\
+Transformers is a way to encode positional information and relationship. They have levels of abstractions: query, key and value. They are inouts. We projected to various linear spaces. We project all the V, K, Q for some neural networks. After that how see how important is what we projected. Another thing is positional encoding. Positional encoding is adding some numbers to the inputs with close positional encodings are close to each other and different positional encodings are far away from each other. You dont always have to use positional encodings. Sometimes it helps, sometimes it doesn't. {\it <Description of pic>} The best SQuADs (BERT and XLNet) are transformers with LSTMs on top of them. The good thing is you don't need to train it yourself. You can just import that.
+
+\subsubsection*{Google neural machine translation}
+
+How the mashine translation works now such as Google mashine translation? Every time you write something to Google to be translated your phrase goes into the eights GPUs (right now maybe more) and LSTM encode them into one vector that captures the meaning of the phrase. And that you decode that vector into another language one word by one. For that you need examples of translations that you can train them.
+
+\subsubsection*{Transation without parallel texts}
+
+Facebook made very cool thing a couple mounthes ago. How to get translations if you dont have examples of transltions? This is just a cool story (???). How do they did that? The tried to push the embeddings together. So you have one embedded space, you have another embeded space, let's made them look alike. Then we can switch a vector: so we can  embedded one language take one vector and decode at another.\\
+Viscerial learning is when you works against another network. Here for example we have two outer encodes and then we try encode and decode the same sentence so we try encode sentence and then deconstruct the same sentence then we try to denoice it, so we add it some random words or we remove some random words and try to reconstruct the initial sentence so we train the network to that. And then separate network train to tell what languge belongs each vector. So we take the vector and train the network to know what the language of that embedding. So now you can take the loss function of that network and reverce the gradinet and feed the gradient to the initual network. And what it will do not only all the network train to reconstruct the sentences in their languages but also push embedings closer together. So both of these networks will try to fool that viscerial network. The both try to do create embeddings in such a way so that french embeddings look like english embedding. So when you encode the sentence in one language and then feed that network to decode for other languge you have the mashine translation.
+
+\subsubsection*{Image Captioning}
+
+It's just translation from image to text. You have an images, you have a number of features you output a vector and than you decode that vector into text.\\
+{\it <Some funny pics with examples of translations of images.>}
