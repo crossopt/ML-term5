@@ -1,39 +1,36 @@
 \chapter{Deep Learning for NLP}
 
-{\sf We already discussed deep learning networks in principal, we already discussed the applications of image proessing and convolutional neural networks. The last thing we are going to discuss is a deep learning for natural languge processing. We are going to take wider view not for only nlp but just for every sequence this sill works such as dna sequences etc. Emages were kind of easy in terms of image is already a vector or a tensor and you can put it in your network. But words are more complicated. What is the word? Word is some sequence of letters with meaning. And close sequences can have opposite meanings. What we want to do is we still wnat to have a vector what we can feed it into the neural network. And that is achived in word embeddings.}
+{\sf Working with emages is quite simple in terms of image is already a vector or a tensor and you can just put it into your network. But words are more complicated. What is the word? Word is some sequence of letters with meaning. And close sequences can have opposite meanings. What we want to do is we still want to have a vector what we can feed into the neural network. And that is achived in word embeddings.}
 
 \section{Word Embeddings}
 
-Word embedding is creating vector representation for words, for dictuanary. And funny staff can happen. For example if we have created vector space using the method what we will discuss later, we can create the vector space than we can follow path. for example, we take word <<queen>> subtract the word <<woman>> and the word <<man>> and end up with the vector with the word <<king>>. And that is actually happening when we end that award saying with subtracting relationship or countries and capitals. Lets demonstrace how to work with that.
+Word embedding is creating vector representation for words from dictionary. For example, we can create the vector space when some pathes have meaning: we take word <<queen>>, subtract the word <<woman>>, add the word <<man>> and end up with the vector of word <<king>>. Let's demonstrate how to achieve that.
 
 \subsubsection*{word2vec (Google 2013)}
 
-To create the vector from word we need some task that this vector should achieve. For example we can create an language model with those vectors. I.e. we want to predict what is the surrounding words for a scpecific word. For example we say of, the pwobabillity of a target word from the sentle word is
-$$expression$$
-So after that we can calculate the loss function $J$:
-$$expression$$
-The $w_t$ words is the words in some neighborhood of word $w_c$. For example, in sentence <<Quick brown fox jumps over the lasy dog>> words <<quick>>, <<brown>>, <<jumps>> and <<over>> are neighbors for the word <<fox>>. As you can see, for neighbors you have a higher probability and for other words, for example, <<large>> and <<collider>> , you have a lower probability. So the thing is approach taking in word2vec method is let $f(w_t,w_c)=u_{w_t}^Tv_{w_c}$, where $u$ and $v$ are two-vector word embeddings. That multiplication over all neighboring words $w_t$  we calculate the likelyhood and the function and then we use gradient ascent (or descent, if you multiply loss functioon on $-1$) because we can easily calculate the derilivative. This way we will shift over all embeddings over all vectors to the correct one (that encreases the probabillity <<close words been close>>).
-
-\subsubsection*{CBOW \& Skip-gram}
-
-The two main methods are CBOW and Skip-gram. The first one is continious bag of words. We try to predict the word from the sum of the vectors of the surrounding words so we try to predict the center words from the contex, and the ship-gram is trying to predict the context from the center word [pic].\\
-{\it <Pic>}\\
-The main thing is why their doesn't called word2vec. The main thing is that both methods jump from summing up over all dictionary (what was in word2vec) to negative sampling. So instead summing up over all dictionary we can just select 5-10 negative samples.
+To create the vector from word we need some task that this vector should achieve. For example we can predict what words may surround a specific word $w_c$:
+$$P(w_t|w_c)=\frac{e^{f(w_t,w_c)}}{\sum\limits_{w_i\in Dict}e^{f(w_i,w_c)}}$$
+where $P(w_t|w_c)$ means the probability that some word $w_t$ is near the word $w_c$ ($f$ is some function). So after that we can calculate the loss function $J$:
+$$J(w_c)=\frac{1}{|T|}\sum\limits_{t}J_t,\qquad J_t=-\log P(w_t|w_c)=-f(w_t,w_c)+\log\Big(\sum\limits_{w_i\in Dict}e^{f(w_i,w_c)}\Big)$$
+where $w_t$ are words in some neighborhood $T$ of word $w_c$. For example, in sentence <<Quick brown fox jumps over the lasy dog>> words <<quick>>, <<brown>>, <<jumps>> and <<over>> are neighbors for the word <<fox>>. So the word2vec method is let
+$$f(w_t,w_c)=u_{w_t}^Tv_{w_c}$$
+where $u$ and $v$ are word embeddings for words $w_t$ and $w_c$. Also every word $w$ has two vectors: one for calculations when $w$ is the target word (the first parameter of $f$) and one when $w$ is a center word (the second parameter of $f$). So we can initialize all vectors randomly and than shift them into correct ones by using gradient ascent. NOT descent, because we want to maximize the loss function! The terminology sometimes shifts...\\
+But word2vec has a problem: every time we calculate the loss funcrion we need to sum up over all words in dictuary. Instead of that we can just select 5-10 samples of negative examples and sum up over them. This kind of word2vec is used in CBOW and skip-gram. In the first one we try to predict the word from the sum of the vectors of the surrounding words (to predict the center words from the contex). And the second one is trying to predict the context from the center word.
 
 \subsubsection*{Fasttext}
 
-The good increase in embeddings was fasttext from Facebook. They moved from embedding just for word to having embedings from the word all possible n-gramms: <where> $\to$ <wh, whe, her, ere, re> (where < and > are starting and ending symbols). Now what this allows to do is to have embeddings for words what we did not encouter in our train points because the number of, for example. 3-gramms is much much less then then number of words in a dictionary. So every new word is just a sum of a n-gramms.
-
-%\subsubsection*{Semantic and syntatic relations}
-%
-%After you trained your vectors you can play with relationships:\\
-%{\it <Pic>}\\
-%The probling with those is a good performes so this are a just a comparasion there is methods of embaddings, this is a sizes of dataset and this is a size of a vectors. <...>
+A good increase in embeddings was fasttext from Facebook. They moved from embedding just for word to having the sum of embeddings for the word and all its possible n-gramms:
+\begin{center}
+	where $\to$ <where> + <wh + whe + her + ere + re>
+\end{center}
+where '<' and '>' are starting and ending symbols. This allows to have embeddings for that words what we did not encounter in our training process: embedding of a new word will be just a sum of embeddings of its n-gramms [да, без первого слагаемого, представляющего embedding всего слова целиком]. Also the number of n-gramms is much much less than number of words in a dictionary.
 
 \subsubsection*{Sentence embedding}
 
-It still the same, you are try to predict the next sentence from the vectors of the word or you can just use sentence as the word.
-This works in for not sentence data ??? work biovectors authors applied in better technics to protein sequences. So they separates in 3-gramms in 3 ways: when you start from a first letter, the second and the thisd:\\
+It still the same, you try to predict the next sentence from the vectors of the word or you can just use sentence as the word.
+This works even not for sentence data, it also works for protein sequences:\\
+{\it <Pic>}\\
+So they separates in 3-gramms in 3 ways: when you start from a first letter, the second and the thisd:\\
 {\it <Pic>}\\
 So reduces their dimencionality and put them (3gramms) on map and paint them according to some chemical or phisical properties you can see that even you dont actually tell the computer that theese are proteins they hve letters correspondes to some chemical properties just from the text information itself, so just from the infromation how	do different letters come together in sentences it was able to extract the fisical or chemical information, for example, same size, volume is one the one place and chemical properties were arranged otherwise.
 
