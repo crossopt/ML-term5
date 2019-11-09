@@ -35,8 +35,16 @@ $$\begin{cases}
 	{\color{blue} 2)} & AFS,AED,VLK,EYD,RRR,RME,..\\
 	{\color{green} 3)} & FSA,EDV,LKE,YDR,RRR,MEA,..\\
 \end{cases}$$
-So if you reduce dimensionality of received vectors, put 3-gramms on a map and paint them according to some chemical or phisical properties, you will see that it is able to extract the fisical or chemical information, for example, same size, volume etc:\\
-{\it <Pics>}\\
+So if you reduce dimensionality of received vectors, put 3-gramms on a map and paint them according to some chemical or phisical properties, you will see that it is able to extract the fisical or chemical information, for example, same mass, polarity etc:\\
+\begin{figure}[h]
+  \centering
+  \begin{tabular}{ccc}
+    \includegraphics[width=0.25\linewidth]{8a.png} & \hspace{0.5cm}
+    \includegraphics[width=0.25\linewidth]{8b.png} & \hspace{0.5cm}
+    \includegraphics[width=0.25\linewidth]{8c.png} \\
+    Mass & Polatiry & Hydrophobicy \\
+  \end{tabular}
+\end{figure}
 That's amazing because you don't actually tell the computer that theese are protheins with letters correspondes to some chemical properties.
 
 \section{Models in NLP}
@@ -45,21 +53,47 @@ The important thing is you don't have to use neural networks after you get embed
 
 \subsubsection*{RNN}
 
-The H's are networks, x's are inputs and y's are outputs [pic.]. Each network in RNN does not only produce an output but also some vector that it fits in the next same network. And for two years everyone got excited about recursive neural networks [pic.] but not anymore.\\
-{\it <Pics>}\\
+The H's are networks, x's are inputs and y's are outputs [pic. 8.1]. Each network in RNN does not only produce an output but also some vector that it fits in the next same network. And for two years everyone got excited about recursive neural networks [pic. 8.2] but not anymore.\\
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[c]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{8d.png}
+    \caption*{(8.1) Recurrent NN}
+  \end{subfigure}
+  \hspace{2cm}
+  \begin{subfigure}[c]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{8e.png}
+    \caption*{(8.2) Recursive NN}
+  \end{subfigure}
+\end{figure}
 But the problems show themselves quite quickly after we start using RNNs and the almost always we have to do with vanishing or exploding gradient. {\it <The intuition why it happens>} To fight that the LSTM was envented.
 
 \subsubsection*{LSTM, BiLSTM}
 
-LSTM is a long short term memory network (we are going to go in depth over that network in a deep learning cource). What we need to know by now: it may helps when you have a sequentional data. The important thing is LSTM decides on each step what to keep from previous step, what to keep from current input and what to keep from current output. How does LSTM looks in practice? It is a BiLSTM (bidirectional LSTM) [pic.]. Every word represented as a vector feeds into the first LSTM network and then you have another LSTM network what goes into other direction. So you read the text from front to back and from back to front and then feed outputs from the first network to the second. Then you concatenate both outputs and the result is a desicion for something. For example, if you want to generate the next word you can use softmax for the dictionary and then select the maximum.\\
-{\it <Pic>}\\
-This is common used LSTM structure because you get more information when you go from left to right and from right to left.
+LSTM is a long short term memory network (we are going to go in depth over that network in a deep learning cource). What we need to know by now: it may helps when you have a sequentional data. The important thing is LSTM decides on each step what to keep from previous step, what to keep from current input and what to keep from current output.
+\begin{wrapfigure}{r}{0.35\linewidth}
+  \vspace{-1.4cm}
+  \begin{center}
+    \includegraphics[width=\linewidth]{8f.png}
+  \end{center}
+  \vspace{-0.6cm}
+  \caption*{(8.3) BiLSTM}
+  \vspace{-0.8cm}
+\end{wrapfigure}
+How does LSTM looks in practice? It is a BiLSTM (bidirectional LSTM) [pic. 8.3]. Every word represented as a vector feeds into the first LSTM network and then you have another LSTM network what goes into other direction. So you read the text from front to back and from back to front and then feed outputs from the first network to the second. Then you concatenate both outputs and the result is a desicion for something. For example, if you want to generate the next word you can use softmax for the dictionary and then select the maximum. This is common used LSTM structure because you get more information when you go from left to right and from right to left.
 
 \subsubsection*{Attention}
 
-Attention is just adding a layer with the softmax after input layer. The property of the vector you get from softmax is that all the numbers of the features are summed up to one. It is called attention because you try to see how much attention every input gets. So you put your input into the attention layer, then you multiply the output of the attention network by the input and then you feed the result into desicion network. Here you can see examples of distribution attention in a sentence:\\
-{\it <Pic>}\\
-This picture does not show that men is more important than woman! The attention has meaning only in one sentence: <<climbing>> has more attention then <<two>> because it is more important for our decision. 
+\begin{wrapfigure}{r}{0.35\linewidth}
+  \vspace{-1cm}
+  \begin{center}
+    \includegraphics[width=\linewidth]{8g.png}
+  \end{center}
+  \vspace{-0.6cm}
+  \caption*{(8.4) Attention}
+  \vspace{-0.6cm}
+\end{wrapfigure}
+Attention is just adding a layer with the softmax after input layer. The property of the vector you get from softmax is that all the numbers of the features are summed up to one. It is called attention because you try to see how much attention every input gets. So you put your input into the attention layer, then you multiply the output of the attention network by the input and then you feed the result into desicion network. Here [pic. 8.4] you can see examples of distribution attention in a sentence. This picture does not show that men is more important than woman! The attention has meaning only in one sentence: <<climbing>> has more attention then <<two>> because it is more important for our decision. 
 
 \subsubsection*{Transformers}
 
@@ -82,5 +116,4 @@ Viscerial learning is when you work against another network. For example, we hav
 
 \subsubsection*{Image Captioning}
 
-The image captioning is just a translation from image to text. You have an images, you have a number of features and you decode that vector into text. Also you can translate from image to image:\\
-{\it <Some funny pics with examples of translations of images.>}
+The image captioning is just a translation from image to text. You have an images, you have a number of features and you decode that vector into text.
