@@ -110,10 +110,12 @@ How the mashine translation works now such as a Google mashine translation? Ever
 
 Facebook made very cool thing a couple mounthes ago. How to get translations if you don't have examples? How did they do that? They tried to push embeddings together. So you have one embedded space, you have another embeded space and let's made them look alike. Then we can switch a word embedding: one embedded language makes a vector from that word and another just decodes the result. How to push embeddings together?
 
-\subsubsection*{Viscerial learning}
+\vspace{-0.3cm}
+\subsubsection*{Adversarial learning}
 
-Viscerial learning is when you work against another network. For example, we have two encoders, we try to encode sentence in one language and then deconstruct the same sentence in another language. We do it by reconstructing the initial sentence: adding or removing some random words. So we train the separate networks to do that. After that we train a viscerial network to tell what languge belongs each embedding. So both of those networks will try to fool that viscerial network. They both try to create embeddings in such a way so, for example, that french embeddings look like english embeddings.
+Adversarial learning is when you work against another network. [Используется $N$ сетей, одна для каждого языка. Каждая сеть -- автоэнкодер, т.е. пытается на выходе получить ту же фразу, что и на входе. В середине этих сетей расположен слой небольшого размера, веса которого образуют embedding для фразы с input'а. Еще одна сеть, adversarial, смотрит на embedding вектора с этих слоев и пытается определить, к какой сетке (и, соответственно, к какому языку) они относятся. Ее награда (функция, которую мы максимизируем) -- то, насколько правильно она классифицирует. Награда каждой из $N$ сетей-автоэнкодеров -- сумма того, насколько она правильно восстанавливают фразу, и награды adversarial сети со знаком минус. Т.е. они помимо своей задачи восстановления последовательностей ище и стараются, чтобы вектора embedding были похожи. После обучения перевод из языка A в язык B выглядит следующим образом: мы берем первую половину сети-автоэнкодера для языка A и правую половину сети-автоэнкодера для языка B и конкатенацией получаем сеть, переводящую фразу.]
 
+\vspace{-0.3cm}
 \subsubsection*{Image Captioning}
 
 The image captioning is just a translation from image to text. You have an images, you have a number of features and you decode that vector into text.
