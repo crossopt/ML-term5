@@ -135,3 +135,7 @@ After finding $\bar\alpha_i$ and $\xi_i$ we can easily find good support vectors
 
 Even in linearly separable case you may use the soft margin. It allows to priorotize (by choosing constant $C$): you want to have less bad support vectors or you want to have higher margins. However, we should care how many support vectors we have ($E_{gen}$ is a \hyperlink{gen_error}{generalisation error}):
 $$E_{gen}\le\frac{|\{x\colon x \text{ is support vector}\}|}{|\{x\colon x \text{ is training vector}\}|}$$
+
+\section{Multi-class SVM}
+
+[Вы просто сводите к задаче бинарной классификации: сначала отделяете один класс от всех, затем другой и т.д. Тем самым вы получаете для каждого класса свой SVM, который сообщает, принадлежит точка этому классу или нет.]
