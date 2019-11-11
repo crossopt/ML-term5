@@ -1,1 +1,81 @@
 \chapter{Support Vector Machines}
+
+{\sf Support vector machines (SVM) were a widely used method in 2000s. But it's still a very nice method when you have a small data problem. Let's imagine we have two classes ($+1$ and $-1$) and we have 3 possible hypotheses [pic.]. The red one is better the others. So SVM maximize the margins -- distances of the closest points of each class. It's mathematically proved that it's an optimal desicion. The bigger the margins then the higher the probability that we are correct on the general set. How do we solve it?}
+
+\section{Linearly Separable Case}
+\vspace{-0.6cm}
+\subsubsection*{Maximize the margin}
+
+{\it <Pics>}\\
+Let's say we have an optimal hyperplane $H$ what defined by a norm vector $w$ [pic.] (formula for $H$ is $w^Tx-b=0$). $H$ is optimal so the distances from $H$ to $x_j$ (closest point to $H$ from one class) and from $H$ to $x_i$ (closest point from another class) are maximal. The sum of that distances is the result of projecting $\overrightarrow{x_jx_i}$ on $w$ divided by $\|w\|$:
+$$\frac{w^T(x_i-x_j)}{\|w\|}$$
+what we want to maximize. Also $H$ is on the middle between $x_i$ and $x_j$ (because we want to maximize both distances $x_i$ to $H$ and $x_j$ to $H$). If we multiply $w$ and $b$ by same value, the $H$ will not change, so let's scale $w$ and $b$ such that hyperplane $wx-b=-1$ contains point $x_j$ ($w^Tx_j-b=-1$) and hyperplane $wx-b=1$ contains point $x_i$ ($w^Tx_i-b=1$). So we want to maximize:
+$$\frac{w^T(x_i-x_j)}{\|w\|}=\frac{w^Tx_i-b-(w^Tx_j-b)}{\|w\|}=\frac{2}{\|w\|}$$
+or, what is equal, minimize $\|w\|=w^Tw$ under $y_k(w^Tx_k-b)\ge 1$ constraints for every point $x_k$ from the dataset. That constraint means that point $x_k$ with $y_k=-1$ is under the $H$ and with $y_k=1$ is over the $H$. So this is an optimization task for SVM:
+$$\begin{cases}
+	\frac{1}{2}w^Tw\to\min, \\
+	y_i(w^Tx_i-b)\ge1.
+\end{cases}$$
+The solution of this quadratic problem is quite easy, but we are going to do it in a complicated way.
+
+\subsubsection*{Karush-Kuhn-Tucker conditions}
+
+So we have an optimisation task (what is called the primal problem):
+$$\begin{cases}
+	\min\limits_{z}f(z), \\
+	g_i(z)\le0, \\
+	h_i(z)=0.
+\end{cases}$$
+If $z^*$ is a local minimum, then there are Lagrangian multipliers $\alpha_i^*$ and $\beta_j^*$ for:
+$$\mathcal{L}(z,\alpha,\beta)=f(z)+\sum\limits_{i=1}^{m}\alpha_i g_i(z)+\sum\limits_{j=1}^{n}\beta_jh_j(z)$$
+such that (Karush-Kuhn-Tucker conditions):
+$$\begin{cases}
+	\frac{\partial}{\partial z_i}\mathcal{L}(z^*,\alpha^*,\beta^*)=0, \\
+	\frac{\partial}{\partial \beta_i}\mathcal{L}(z^*,\alpha^*,\beta^*)=0, \\
+	\alpha_i g_i(z^*)=0, \\
+	\alpha_i^*\ge0.
+\end{cases}$$
+And finding the solution of the primal problem is equal to finding the solution of the dual problem (if both solutions exists):
+$$\max\limits_{\alpha,\beta}\min\limits_{z}\mathcal{L}(z,\alpha,\beta),\qquad\alpha\ge0$$
+
+\subsubsection*{Solution of the dual problem}
+
+So if we formulate our SVM task in terms of the primal problem, we will have
+$$\begin{cases}
+	\frac{1}{2}w^Tw\to\min, \\
+	-(y_i(w^Tx_i-b)-1)\le0.
+\end{cases}$$
+And we get this optimization problem ($z=(w,b)$):
+$$\max\limits_{\alpha}\min\limits_{z}\mathcal{L}(\overbrace{w,b}^z,\alpha)=\frac{1}{2}(w^Tw)-\sum\limits_{i=1}^{N}\alpha_i(y_i(w^Tx_i-b)-1),\qquad\alpha_i\ge0$$
+Let's find $q(\alpha)=\min\limits_{w,b}\mathcal{L}(w,b,\alpha)$ [достаточно найти градиенты, поскольку по условию исходной задачи нужные нам $w$ и $b$ существуют]:
+$$\begin{cases}
+	0=\nabla_w\mathcal{L}(w^*,b^*,\alpha)=w^*-\sum\limits_{i=1}^{N}\alpha_iy_ix_i\Rightarrow w^*=\sum\limits_{i=1}^{N}\alpha_iy_ix_i &  \\
+	0=\nabla_b\mathcal{L}(w^*,b^*,\alpha)=\sum\limits_{i=1}^{N}\alpha_iy_i & 
+\end{cases}\Longrightarrow$$
+$$\Longrightarrow q(\alpha)=\mathcal{L}(w^*,b^*,\alpha)=\frac{1}{2}(w^{*^T}w^*)-\sum\limits_{i=1}^{N}\alpha_i(y_i(w^{*^T}x_i-b^*)-1)=$$
+$$=\frac{1}{2}\Big(\sum\limits_{i=1}^{N}\alpha_iy_ix_i\Big)^T\Big(\sum\limits_{i=1}^{N}\alpha_iy_ix_i\Big)-\sum\limits_{i=1}^{N}\alpha_i\big(y_i\Big(\Big(\sum\limits_{j=1}^{N}\alpha_jy_jx_j\Big)^Tx_i-b^*\Big)-1\big)=$$
+$$=\frac{1}{2}\sum\limits_{i=1}^{N}\sum\limits_{j=1}^{N}y_iy_ja_ia_jx_i^Tx_j-\sum\limits_{i=1}^{N}\sum\limits_{j=1}^{N}y_iy_ja_ia_jx_i^Tx_j+b^*\sum\limits_{i=1}^{N}a_iy_i+\sum\limits_{i=1}^{N}a_i=$$
+$$=\sum\limits_{i=1}^{N}a_i-\sum\limits_{i=1}^{N}\sum\limits_{j=1}^{N}y_iy_ja_ia_jx_i^Tx_j$$
+And we get quadratic optimization problem under linear constraints:
+$$\max\limits_{\alpha}q(\alpha),\qquad\alpha_i\ge0,\qquad 0=\sum\limits_{i=1}^{N}\alpha_iy_i$$
+what is efficiently solved by quadratic programming.
+
+\subsubsection*{CVXOPT package}
+
+Our quadratic problem we can solved by CVXOPT package. It solves this kind of tasks:
+$$\begin{cases}
+	\frac{1}{2}\alpha^TP\alpha+q^T\alpha\to\min,\\
+	G\alpha\le h, \\
+	A\alpha=b.
+\end{cases}$$
+In terms of out problem:
+$$\begin{cases}
+	P_{ij}=y_iy_jx_i^Tx_j, & q_i=-1, \\
+	G=-I_N, & h_i = 0, \\
+	A=y^T, & b_i = 0.
+\end{cases}$$
+But why we used dual problem? Why we can't solve our task in terms of primal problem by using this package? That's because if we use the dual problem, we will have the kernel trick.
+
+\section{Linearly Inseparable Case}
+\vspace{-0.6cm}
+\subsubsection*{Kernel trick}
