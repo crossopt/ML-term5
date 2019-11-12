@@ -40,6 +40,8 @@ Why would that work? Expalnation is quite simple: there is a theorem  that prove
 
 If we have a linearly inseparable case, we have a Pocket Algorithm. {\it <An example with handwritten digits dataset>} A Pocket Algorithm is a simple modification of the Perceptron Algorithm: you just apply it for in given number of iterations and pick the best one in terms of validation dataset. It is called the Pocket Algorithm because you put your values in a pocket: when you find a new minimum you put it in the pocket and then you select the best partition from the pocket.
 
+
+\hypertarget{new_features}{}
 \subsubsection*{Feature Engineering}
 
 The another way to fight a linearly inseparable dataset is adding new feature. For example [pic.~5.4] you can add feature like distance to (0,0) and get a linearly separable dataset [pic. 5.5].
@@ -71,6 +73,7 @@ where $f(x)$ and $h(x)$ returns a class of a point $x$ ($f$ is the target functi
 \subsubsection*{Hoeffding's inequality}
 
 There is the Hoeffding's inequality:
+\hypertarget{gen_error}{}
 $$P(|E_{in}(h)-E_{out}(h)|>\varepsilon)\le2e^{-\varepsilon^2N}$$
 The difference $E_{in}(h)-E_{out}(h)$ is also called generalization error (sometimes in literature you can found $E_{out}$ as the generalization error). [The generalization error при заданном $h$ -- случайная величина в пространстве датасетов. Неравенство показывает, насколько хорошо ошибки гипотезы $h$ на датасетаx размера $N$ близки к ошибке $h$ на всем множестве $X$.] The big generalization error is a big overfitting and the small generalisation error is a small overfitting.\\
 This inequality means for us that if we increase the dataset we exponentialy decrease the probability of overfitting for a one hypothesis. If we have a set of hypotheses then we have to multiply the right side by the $M$ -- number of hypotheses: 
