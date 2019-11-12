@@ -152,7 +152,7 @@ $$\Longrightarrow q(\alpha)=\mathcal{L}(w^*,b^*,\xi^*,\alpha)=\frac{1}{2}\big(w^
 $$=\sum\limits_{i=1}^{N}\bar\alpha_i-\frac{1}{2}\sum\limits_{i=1}^{N}\sum\limits_{i=1}^{N}y_iy_j\bar\alpha_i\bar\alpha_jx_i^Tx_j$$
 Finally we get this optimization problem:
 $$\begin{cases}
-	\max_{\alpha}q(\alpha), \\
+	\max\limits_{\alpha}q(\alpha), \\
 	0\le\bar\alpha_i\le C, \\
 	\sum\limits_{i=1}^{N}\bar\alpha_i=0.
 \end{cases}$$
@@ -170,7 +170,7 @@ After finding $\bar\alpha_i$ and $\xi_i$ we can easily find good support vectors
 \subsubsection*{Higher dimensionality and generalization}
 
 Even in linearly separable case you may use the soft margin. It allows to priorotize (by choosing constant $C$): you want to have less bad support vectors or you want to have higher margins. However, we should care how many support vectors we have ($E_{gen}$ is a \hyperlink{gen_error}{generalisation error}):
-$$E_{gen}\le\frac{|\{x\colon x \text{ is support vector}\}|}{|\{x\colon x \text{ is training vector}\}|}$$
+$$E_{gen}\le\frac{|\{x\colon x \text{ is a support vector}\}|}{|\{x\colon x \text{ is a training vector}\}|}$$
 
 \section{Multi-class SVM}
 
