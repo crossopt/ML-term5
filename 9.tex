@@ -68,7 +68,7 @@ $$\begin{cases}
 $$\Longrightarrow q(\alpha)=\mathcal{L}(w^*,b^*,\alpha)=\frac{1}{2}\big(w^{*^T}w^*\big)-\sum\limits_{i=1}^{N}\alpha_i(y_i\big(w^{*^T}x_i-b^*\big)-1)=$$
 $$=\frac{1}{2}\Big(\sum\limits_{i=1}^{N}\alpha_iy_ix_i\Big)^T\Big(\sum\limits_{i=1}^{N}\alpha_iy_ix_i\Big)-\sum\limits_{i=1}^{N}\alpha_i\big(y_i\Big(\Big(\sum\limits_{j=1}^{N}\alpha_jy_jx_j\Big)^Tx_i-b^*\Big)-1\big)=$$
 $$=\frac{1}{2}\sum\limits_{i=1}^{N}\sum\limits_{j=1}^{N}y_iy_ja_ia_jx_i^Tx_j-\sum\limits_{i=1}^{N}\sum\limits_{j=1}^{N}y_iy_ja_ia_jx_i^Tx_j+b^*\sum\limits_{i=1}^{N}a_iy_i+\sum\limits_{i=1}^{N}a_i=$$
-$$=\sum\limits_{i=1}^{N}a_i-\sum\limits_{i=1}^{N}\sum\limits_{j=1}^{N}y_iy_ja_ia_jx_i^Tx_j$$
+$$=\sum\limits_{i=1}^{N}a_i-\frac{1}{2}\sum\limits_{i=1}^{N}\sum\limits_{j=1}^{N}y_iy_ja_ia_jx_i^Tx_j$$
 And we get quadratic optimization problem under linear constraints:
 $$\max\limits_{\alpha}q(\alpha),\qquad\alpha_i\ge0,\qquad 0=\sum\limits_{i=1}^{N}\alpha_iy_i$$
 what is efficiently solved by quadratic programming.
