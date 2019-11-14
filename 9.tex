@@ -108,12 +108,17 @@ define a scalar product operation $K$ (kernel) there. Here you can see some kern
     \includegraphics[width=0.25\linewidth]{9e.png} \\
     $\langle x_1,x_2\rangle$ & $(r+\gamma\langle x_1,x_2\rangle)^d$ & $e^{-\gamma|x_1-x_2|^2}$ \\
   \end{tabular}
-  \vspace{-0.8cm}
 \end{figure}
+How do we classify using the kernel trick? Let's imagine we have a function $\phi$ returns vector $\phi(x)$ with new featers in higher dimensional space. If we apply SVM for inputs $\phi(x_i)$, we will have:
+$$\overline{w}=\sum\limits_{i=1}^{N}\alpha_i\phi(x_i),\qquad\overline{b}=(\overline{w}^T\phi(v_{support})-y_{support})$$
+where $\phi(v_{support})$ is the support vector, $\overline{w}$ and $\overline{b}$ are parameters of the dividing hyperplane (in the higher dimensional space). So the class of a point $x$ from the initial space is
+$$y=sign\big(\overline{w}^T\phi(x)-\overline{b}\big)=sign\big(\Big(\sum\limits_{i=1}^{N}\alpha_i \phi(x_i)\Big)^T\phi(x)-\overline{b}\big)=$$
+$$=sign\big(\Big(\sum\limits_{i=1}^{N}\alpha_iK(x_i,x)\Big)-\Big(\sum\limits_{i=1}^{N}\alpha_iK(x_i,v_{support})-y_{support}\Big)\big)$$
+As you can see, it's enough to define a scalar product operation $K$ for classification.
 
 \subsubsection*{Soft margin}
 
-\begin{wrapfigure}{r}{0.35\linewidth}
+\begin{wrapfigure}{r}{0.3\linewidth}
   \vspace{-1.4cm}
   \begin{center}
     \includegraphics[width=\linewidth]{9f.png}
