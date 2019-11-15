@@ -118,14 +118,14 @@ As you can see, it's enough to define a scalar product operation $K$ for classif
 
 \subsubsection*{Soft margin}
 
-\begin{wrapfigure}{r}{0.3\linewidth}
+\begin{wrapfigure}{r}{0.33\linewidth}
   \vspace{-1.4cm}
   \begin{center}
     \includegraphics[width=\linewidth]{9f.png}
   \end{center}
-  \vspace{-0.6cm}
-  \caption*{(9.3) Linear inseparable}
   \vspace{-0.8cm}
+  \caption*{(9.3) Linear inseparable}
+  \vspace{-2cm}
 \end{wrapfigure}
 If we have some bad points [pic. 9.3.] what make our dataset linearly inseparable, we want to skip these points and apply our algorithm for the linearly separable case. This way calls soft margin. So the optimization task for the soft margin looks like this:
 $$\begin{cases}
@@ -170,7 +170,7 @@ We have three vector types:
 	\item Good support vectors: $0<\bar\alpha_i<C$, $\xi_i=0$, $y_i(w^Tx_i-b)=1$
 	\item Bad support vectors: $\bar\alpha_i=C$, $\xi_i>0$, $y_i(w^Tx_i-b)\le1$
 \end{enumerate}
-After finding $\bar\alpha_i$ and $\xi_i$ we can easily find good support vectors. And that vectors helps us find $b$ -- the second parameter of the optimal hyperplane. Also there is no other vector types because of primal and dual problem inequalities and Karush-Kuhn-Tucker conditions.
+After finding $\bar\alpha_i$ and we can easily find good support vectors. And that vectors helps us find $b$ -- the second parameter of the optimal hyperplane. Also there is no other vector types because of primal and dual problem inequalities and Karush-Kuhn-Tucker conditions.
 
 \subsubsection*{Higher dimensionality and generalization}
 
