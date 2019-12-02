@@ -18,9 +18,7 @@ where $K$ is the number of different values of $i$'th feature.
 
 \subsubsection*{Bag of words}
 
-The main application area of naive Bayes classifier is text because there are so many features. But we just calculate the word frequences in the text using bag of words:\\
-{\it <Pic>}\\
-And the features of the text are just the numbers of some words in it.
+The main application area of naive Bayes classifier is text because there are so many features. But we just calculate the word frequences in the text using bag of words. And the features of the text are just the numbers of some words in it.
 
 \subsubsection*{Examples of Bayes classifiers with various types of features}
 
@@ -53,6 +51,12 @@ How it works in practise?
 
 \subsubsection*{EM Clustering}
 
-Let's imagine we want to unite points in two clusters. We can assume that point of each cluster distributed by the normal distribution. So the steps of EM algorithm look like this:\\
-{\it <Pics>}\\
-{\it <Naive Bayes is a very nice baseline!>}
+Let's imagine we want to unite points in two clusters. We can assume that point of each cluster distributed by the normal distribution. So the final step of EM algorithm looks like this [pic. 10.1]:\\
+\begin{wrapfigure}{r}{0.33\linewidth}
+	\vspace{-0.5cm}
+  \begin{center}
+    \includegraphics[width=\linewidth]{10a.png}
+    \caption*{(10.1) EM Clustering}
+  \end{center}
+\end{wrapfigure}
+Naive Bayes is a very nice baseline! When you approach a new data task and collect the data, you may find that some complex algorithms don't work. And you don't know: is it a problem with data or with chosen algorithm? So you need a baseline -- something that almost always works. In that case naive Bayes can help you.
