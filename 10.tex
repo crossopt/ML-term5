@@ -14,7 +14,7 @@ $$P(x_1,\ldots,x_n|y)=P(x_1|y)\cdot\ldots\cdot P(x_n|y);$$
 $$P(x_i|y)=\frac{count(x_i,y)}{count(y)};$$
 [$count(x_i, y)$ -- количество точек из класса $y$ в нашем датасете, у которых $i$-ая фича равна $x_i$, $count(y)$ -- количество всех точек в классе $y$.] To avoid case $count(x_i,y_i)=0$ we assume that there are at least $\alpha$ points of each class with feature $x_i$:
 $$P (x_i|y)=\frac{count(x_i,y)+\alpha}{count(y)+\alpha K}$$
-where $K$ is the number of different values of $i$'th feature.
+where $K$ is the number of classes.
 
 \subsubsection*{Bag of words}
 
@@ -51,12 +51,22 @@ How it works in practise?
 
 \subsubsection*{EM Clustering}
 
-Let's imagine we want to unite points in two clusters. We can assume that point of each cluster distributed by the normal distribution. So the final step of EM algorithm looks like this [pic. 10.1]:\\
-\begin{wrapfigure}{r}{0.33\linewidth}
-	\vspace{-0.5cm}
-  \begin{center}
-    \includegraphics[width=\linewidth]{10a.png}
-    \caption*{(10.1) EM Clustering}
-  \end{center}
-\end{wrapfigure}
+Let's imagine we want to unite points in two clusters. We can assume that point of each cluster distributed by the normal distribution. So the steps of EM algorithm looks like this:\\
+\begin{figure}[H]
+  \centering
+  \begin{tabular}{ccc}
+    \includegraphics[width=0.25\linewidth]{10a.png} & \hspace{0.5cm}
+    \includegraphics[width=0.25\linewidth]{10b.png} & \hspace{0.5cm}
+    \includegraphics[width=0.25\linewidth]{10c.png} \\
+    Step 1 & Step 2 & Step 3 \\
+    & & \\
+    \includegraphics[width=0.25\linewidth]{10d.png} & \hspace{0.5cm}
+    \includegraphics[width=0.25\linewidth]{10e.png} & \hspace{0.5cm}
+    \includegraphics[width=0.25\linewidth]{10f.png} \\
+    Step 4 & Step 5 & Step 6 \\
+  \end{tabular}
+\end{figure}
+
+\subsubsection*{Naive Bayes is a very nice baseline!}
+
 Naive Bayes is a very nice baseline! When you approach a new data task and collect the data, you may find that some complex algorithms don't work. And you don't know: is it a problem with data or with chosen algorithm? So you need a baseline -- something that almost always works. In that case naive Bayes can help you.
