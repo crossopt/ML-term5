@@ -1,1 +1,40 @@
 \chapter{Global and Local Search}
+
+{\sf Let's imagine we want to solve some kind of Traveling Salesman Problem (task when you have points that you need to travel to and you want to find the optimal way). How would we solve it with our methods? Well, we need to use the search methods. If we have differentiable loss function we can use gradient descent, but if the space is very strange and we don't know how to calculate anything but we want to optimize it, we use global and local search. The global search does not analyze a local neighborhood of a point. The local search analyzes the local neighborhood of a point and goes in an optimal way.}
+
+\section{Cross-Entropy Method}
+
+The cross-entropy (global search method) we are going to find a distribution what produces good points:
+\begin{enumerate}
+	\item At step $t=1$ we choose the random parameters $\theta_0$ for a distribution.
+	\item We generate a sample $x_1,\ldots,x_N$ from distribution $p(x;\theta_{t-1})$.
+	\item We geet the best $k$ points from $x_1,\ldots,x_N$ and find the next distribution using that points. So we optimize the next set of parameters based on the folowing criteria:
+	$$\theta_t=\arg\max\limits_{u}\frac{1}{k}\sum\limits_{x_i\in \text{best }k}y_i\cdot\frac{p(x_i;u)}{p(x_i;\theta_{t-1})}\cdot p(x_i, \theta_{t-1})$$
+\end{enumerate}
+
+\section{Hill Climb}
+
+Hill climb is a local search method. It is called hill climb because it is sort of simulating climbing a hill at night: imagine you want to reach the top of the hill but you can't see it. It is simular to gradient ascent algorithm: you look around yourself and go in the direction when hill rises. But the problem is that local maximum may not be a global maximum, and when you reach the local maximum you will stop. Here some ways to correct that:
+\begin{enumerate}[label=$\bullet$]
+	\item {\sc Stochastic hill climbing.} Make steps with probability proportional to increase the metric (for example, with softmax).
+	\item {\sc Taboo search.} We do not return to visited states.
+	\item {\sc Particle swarm optimization.} We have multiple climbers that pass imformation: each step climber chooses a direction between its personal best position and global best position.
+	\item {\sc Simulated annealing.} We define direction by the softmax with the temperature:
+	$$P(s_i)=\frac{e^{\Delta E(s_i)/T}}{\sum\limits_{j} e^{\Delta E(s_j)/T}}$$
+	where $\Delta E(s_i)$ is the change of our function in the state $s_i$, $T$ is the temperature parameter. The high temperature mades probabilities $P(s_i)$ even and the lower temperature made one of probabilities prevalent.
+\end{enumerate}
+
+\subsubsection*{Quantum computers}
+
+{\it <Quantum computers find function optimum very fast>}
+
+\section{Genetic Algorithm}
+
+Genetic algorithm works as evolution works: we select best mates and exchange <<genetic>> information by creating a new one with some characteristic of its parents by concatenating some parts of them (plus adding some mutations). Then we replace the worst mate with the new one. The problem of this kind of algorithm is that it works very slow. Of that note there is an important statement what is called <<no free lunch theorem>>.
+
+\subsubsection*{No free lunch theorem}
+
+Let's say we have two optimization algorithms $A_1$, $A_2$ and some sequence of values $d_m^y=\{y_1,\ldots,y_m\}$ of some function $f$. So the sum of probabilities to produce $d_m^y$ over all posible tasks $f$ is the same for $A_1$ and $A_2$:
+$$\sum\limits_{f}P(d_m^y|f,m,A_1)=\sum\limits_{f}P(d_m^y|f,m,A_2)$$
+It means that if one algorithm is the best in one task then other algorithm will be better in another.\\
+One interpretation of this theorem is finding the best algorithm $A$ for solving task $f$ and probably for simular task $g$ algorithm $A$ will be also the best.
