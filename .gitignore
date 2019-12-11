@@ -5,3 +5,5 @@
 !*.sh
 !pics/
 !/pics/*.png
+!/lecs/
+!/lecs/*.tex
