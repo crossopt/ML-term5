@@ -7,9 +7,9 @@
 In the cross-entropy (global search method) we are going to find a distribution what produces points near the optimum:
 \begin{enumerate}
 	\item At step $t=1$ we choose the random parameters $\theta_0$ for a distribution.
-	\item We generate a sample $x_1,\ldots,x_N$ from distribution $p(x;\theta_{t-1})$.
+	\item We generate a sample $x_1,\ldots,x_N$ from distribution $p(x|\theta_{t-1})$.
 	\item We geet the best $k$ points from $x_1,\ldots,x_N$ and find the next distribution using that points. So we optimize the next set of parameters based on the folowing criteria:
-	$$\theta_t=\arg\max\limits_{u}\frac{1}{k}\sum\limits_{x_i\in \text{best }k}y_i\cdot\frac{p(x_i;u)}{p(x_i;\theta_{t-1})}\cdot p(x_i, \theta_{t-1})$$
+	$$\theta_t=\arg\min\limits_{u}\frac{1}{k}\sum\limits_{x_i\in \text{best }k}-y_i\cdot\frac{p(x_i|u)}{p(x_i|\theta_{t-1})}\log p(x_i| \theta_{t-1})$$
 \end{enumerate}
 
 \section{Hill Climb}
