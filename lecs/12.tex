@@ -44,8 +44,9 @@ Why the found solution is the minumum, not the maximum? Well, because $E(w)$ is 
   \caption*{(12.2) Overfitting}
   \vspace{-2cm}
 \end{wrapfigure}
-Polinomial regression is like the linear regression with polinomial features. For example, $x_i\in\mathbb{R}$, $x_i\to(1,x_i,x_i^2)^T$ or \\
-$x_i\in\mathbb{R}^2$, $(a_1, a_2)^T\to(1,a_1,a_2,a_1^2,a_2^2,a_1a_2)^T$ etc...\\
+Polinomial regression is like the linear regression with polinomial features. For example:
+$$x_i\in\mathbb{R},\ x_i\to(1,x_i,x_i^2)^T \qquad
+x_i\in\mathbb{R}^2,\ (a_1, a_2)^T\to(1,a_1,a_2,a_1^2,a_2^2,a_1a_2)^T$$
 But when we increase the dimensionality of our space, we can owerfit [pic. 12.2]. How do we fight that?
 
 \newpage
@@ -147,9 +148,9 @@ One of the ways to prevent overfitting is the regularization. And for regression
 \subsubsection*{$L_2$ regularization}
 
 $L_2$ regularization is adding a square of the weights:
-$$E(w) + \alpha w^Tw=\frac{1}{N}\|Xw-y\|_2^2+\alpha w^Tw=$$
-$$=\frac{1}{N}(Xw-y)^T(Xw-y)+\alpha w^Tw$$
-$$\nabla \left(E(w)+\alpha w^Tw\right)=0\Rightarrow\left(X^TX+\alpha I\right)^{-1}X^Ty$$
+$$E(w) + \frac{\alpha}{N} w^Tw=\frac{1}{N}\|Xw-y\|_2^2+\frac{\alpha}{N} w^Tw=$$
+$$=\frac{1}{N}\left((Xw-y)^T(Xw-y)+\alpha w^Tw\right)$$
+$$\nabla \left(E(w)+\frac{\alpha}{N} w^Tw\right)=0\Rightarrow\left(X^TX+\alpha I\right)^{-1}X^Ty$$
 Choosing $\alpha$ we have:
 \begin{figure}[H]
   \centering
@@ -169,7 +170,7 @@ Big $\alpha$ ($\approx1$) is underfit because algorithms tries to made weights s
 \subsubsection*{LASSO and $L_1$ regularization}
 
 If our feature space is greater than dataspace, we want to ignore some number of features. In that case we use LASSO (Least Absolute Shrinkage and Selection Operator). LASSO is the method what limits norm of the $w$ which makes some coefficients equal to zero. The way to do it is the $L_1$ regularization:
-$$E(w)=\frac{1}{N}\|Xw-y\|_2^2+\alpha\|w\|_1$$
+$$E(w)=\frac{1}{N}\|Xw-y\|_2^2+\frac{\alpha}{N}\|w\|_1$$
 Now we can't optimize $E(w)$ in one step because we can't just find the derivative. So for that we use LARS (Least Angle Regression).
 
 \subsubsection*{LARS}
@@ -185,7 +186,7 @@ Let's define $\overline{x}_i$ as a vector of the i'th features of all points fro
 \subsubsection*{Elastic Net}
 
 Elastic Net is a sum of $L_1$ term and $L_2$ term:
-$$E(w)=\frac{1}{N}\|Xw-y\|_2^2+\alpha(1-l)\|w\|_2^2+\alpha l\|w\|_1$$
+$$E(w)=\frac{1}{N}\|Xw-y\|_2^2+\frac{\alpha(1-l)}{N}\|w\|_2^2+\frac{\alpha l}{N}\|w\|_1$$
 
 \subsubsection*{Support vector regression machine}
 
