@@ -128,3 +128,28 @@ $R^2$ score is an useful metric for regression:
 $$R^2=1-\frac{u}{v}$$
 where
 $$u=\sum\limits_{i=1}^{N}(h(x_i)-y_i)^2\qquad v=\sum\limits_{i=1}^{N}(\overline{y}-y_i)^2\qquad \overline{y}=\frac{1}{N}\sum\limits_{i=1}^{N}y_i$$
+
+\section{Fighting Outliers}
+\vspace{-0.6cm}
+\subsubsection*{Theil-Sen Regressor}
+
+Let's take a subset of all points and train some number of models in that subset. The result is the marginal median of trained models [pic.].
+
+\subsubsection*{RANSAC (RANdom SAmple Consensus)}
+
+It's simular to Theil-Sen regressor: we build models on subsets of dataset. But after that we pick the best one in terms of the number of inliers (not noise) and train a new one on all theese inliers [pic.].
+
+\subsubsection*{Huber regressor} 
+
+Huber regressor splits the error in two parts: close and far away points. For close points we use MSE (Mean Squared Error) and for far away points we use linear error:
+$$\min\limits_{w,\sigma}\sum\limits_{i=1}^{N}H_{m}\left(\frac{x_iw-y_i}{\sigma}\right)+\alpha\|w\|_2^2$$
+where $\sigma$ -- scaling constant and 
+$$H_m(z)=\begin{cases}
+	z^2, & \text{if } |z|<\epsilon \\
+	2\epsilon|z|-\epsilon^2, \text{if } |z|\ge\epsilon
+\end{cases}$$
+The idea of $H_m(z)$ is the far points increase the value of the error error much more smoothly.
+
+\subsubsection*{Comparison of the methods}
+
+{\it <Pics>}
