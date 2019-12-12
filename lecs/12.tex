@@ -1,1 +1,130 @@
 \chapter{Regression}
+
+{\sf The regression problem is the problem of minimization of the sum of the squares of distances between our hypothesis $h(x)$ and value $f(x)$ of datapoint $x$ ($f(x_i)$ is a label $y_i$ of a point $x_i$).}
+
+\section{Linear and Polynomial Regression}
+\vspace{-0.6cm}
+\subsubsection*{Linear regression}
+
+In case of linear regression we want to find optimize linear $h(x)$ ([pic.] with an example of datapoints from $\mathbb{R}$). The linear function regression corresponds to equation $h(x_i)=w^Tx_i=0$ (where datapoint $x_i=(a_1,\ldots,a_n)^T$ replaced by point $(1, a_1,\ldots,a_n)^T$). So we want to minimize the error $E(w)$ (defined as error in sample $E_{in}(h, X)$):
+$$E(w)=E_{in}(h, X)=\frac{1}{N}\sum\limits_{i=1}^{N}(h(x_i)-f(x_i))=\frac{1}{N}\sum\limits_{i=1}^{N}(w^Tx_i-y_i)=\frac{1}{N}\|Xw-y\|_2^2$$
+where
+$$X=\begin{pmatrix}
+	x_1^T \\
+	x_2^T \\
+	\ldots \\
+	x_N^T \\
+	\end{pmatrix} \qquad
+	y=\begin{pmatrix}
+	y_1^T \\
+	y_2^T \\
+	\ldots \\
+	x_N^T \\
+	\end{pmatrix}$$
+And the solution is
+$$\nabla E(w)=\frac{2}{N}\cdot X^T(Xw-y)=0\Rightarrow X^TXw=X^Ty\Rightarrow w=(X^TX)^{-1}X^Ty$$
+Why the found solution is the minumum and not he maximum? Well, because $E(w)$ is the square of some value.
+
+\subsubsection*{Polynomial regression}
+
+Polinomial regression is like the linear regression with polinomial features. For example, $x_i\in\mathbb{R}$, $x_i\to(1,x,x^2)^T$ or $x_i\in\mathbb{R}^2$, $(a_1, a_2)^T\to(1,a_1,a_2,a_1^2,a_2^2,a_1a_2)^T$ etc... But when we increase the dimensionality of our space, we can owerfit:\\
+{\it <Pics>}\\
+How do we fight that?
+
+\section{Theory of Error for Regression}
+\vspace{-0.6cm}
+\subsubsection*{Sine target function}
+
+This is a simple example of linear regression of sine function:\\
+{\it <Pics>}\\
+The error out of sample for the first hypothesis is $0.5$ and for the second is $0.2$. Now let's say we only have two point in our dataset:\\
+{\it <Pics>}\\
+The error in sample for the first hipothesis will is greater than zero and the error out of sample is zero. However in the second case there is some datasets where we have big error out of sample [pic.]. To approach the theory of that we introduce mean hypothesis.
+
+\subsubsection*{Mean hypothesis}
+
+The error out of sample for some hypothesis $h_D$ what trained on a dataset $D$ is
+$$E_{out}(h_D)=\mathbb{E}_X\left(\left(h_D(x)-f(x)\right)^2\right)$$
+[Если вы забыли, что тут происходит, смотрите <...>.] Now let's find the expectation of $E_{out}$ over all datasets:
+$$\mathbb{E_D}\left(E_{out}(h_D)\right)=\mathbb{E}_D\left(\mathbb{E}_X\left(\left(h_D(x)-f(x)\right)^2\right)\right)=\mathbb{E}_X\left(\mathbb{E}_D\left(\left(h_D(x)-f(x)\right)^2\right)\right)$$
+And the mean hypothesis is
+$$\overline{h}(x)=\mathbb{E}_D\left(h_D(x)\right)$$
+The interesting thing is that the mean hypothesis is very close to the best hypothesis, because $\overline{h}(x)$ is the expectation of all best hypotheses of all posible datasets. Of cource, we can't find the mean hypothesis (because it's a theoretical fucntion) but this theoretical function is close to the best hypothesis in our hypothesis set.\\
+Now we have
+$$\mathbb{E}_D\left(\left(h_D(x)-f(x)\right)^2\right)=\mathbb{E}_D\left(\left(h_D(x)-\overline{h}(x)+\overline{h}(x)-f(x)\right)^2\right)=$$
+$$=\mathbb{E}_D\left(\left(h_D(x)-\overline{h}(x)\right)^2+\left(\overline{h}(x)-f(x)\right)^2+2\left(h_D(x)-\overline{h}(x)\right)\left(\overline{h}(x)-f(x)\right)\right)=$$
+$$=\mathbb{E}_D\left(\left(h_D(x)-\overline{h}(x)\right)^2\right)+\left(\overline{h}(x)-f(x)\right)^2$$
+
+\subsubsection*{Bias and variance}
+
+So the $E_D\left(E_{out}(h_D)\right)$ is
+$$E_D\left(E_{out}(h_D)\right)=\mathbb{E}_D\left(\mathbb{E}_X\left(\left(h_D(x)-f(x)\right)^2\right)\right)=\mathbb{E}_X\left(\mathbb{E}_D\left(\left(h_D(x)-\overline{h}(x)\right)^2\right)+\left(\overline{h}(x)-f(x)\right)^2\right)=$$
+$$=\mathbb{E}_X(variance(x)+bias(x))=bias+variance$$
+where
+$$bias=\mathbb{E}_X\left(\left(\overline{h}(x)-f(x)\right)^2\right)$$
+$$variance=\mathbb{E}_X\left(\mathbb{E}_D\left(\left(h_D(x)-\overline{h}(x)\right)^2\right)\right)$$
+What does that mean?\\
+{\it <Pics>}\\
+So we want to reduce bias and increase variance:\\
+{\it <Pics>}\\
+Here we can see values of bias and variance for sine target function:\\
+{\it <Pics>}\\
+
+\section{Regularization}
+
+One of the ways to prevent overfitting is the regularization. And for regression the first way to regularize is using $L_2$ reguralization.
+
+\subsubsection*{$L_2$ reguralization}
+
+$L_2$ reguralization is adding a square of the weights:
+$$E(w) + \frac{\alpha}{N}w^Tw=\frac{1}{N}\|Xw-y\|_2^2+\frac{\alpha}{N}w^Tw=$$
+$$=\frac{1}{N}\left((Xw-y)^T(Xw-y)+\alpha w^Tw\right)$$
+$$\nabla \left(E(w)+\frac{\alpha}{N}w^Tw\right)=0\Rightarrow\left(X^TX+\alpha I\right)^{-1}X^Ty$$
+Choosing $\alpha$ we have:\\
+{\it <Pics>}\\
+Big $\alpha$ ($\approx1$) is underfit because algorithms tries to made weights small rather than fitting the function.
+
+\subsubsection*{Ridge regression}
+
+Another type of reguralisation is the ridge regression:
+$$E(w)=\frac{1}{2N}\|Xw-y\|_2^2+\alpha\|w\|_2^2$$
+<...>
+
+\subsubsection*{LASSO and $L_1$ reguralization}
+
+If our feature space is greater than dataspace we want to ignore some number of features, we use LASSO (Least Absolute Shrinkage and Selection Operator). LASSO is the method what limits norm of the $w$ which makes some coefficients equal to zero. The way to do it is the $L_1$ reguralization:
+$$E(w)=\frac{1}{2N}\|Xw-y\|_2^2+\alpha\|w\|_1$$
+Now we can't optimize $E(w)$ in one step because we cant' just find the derivative. So for that we use LARS (Least Angle Regression).
+
+\subsubsection*{LARS}
+
+Let's define $\overline{x}_i$ as a vector of the i'th features of all points from the dataset (i'th column of matrix $X$). $y$ is still the vector of labels.
+\begin{enumerate}
+	\item We find the feature $\overline{x}_i$ what correlates most with answer $y$ i.e. we find such $\overline{x}_i$ that the angle between $y$ and $\overline{x}_i$ is the smallest.
+	\item Now our hypothesis is $h(x)=\beta_i\overline{x}_i$. If we increase $\beta_i$ (or decrease, in case of negative correlation), the angle between residial $r=y-h(x)$ and $\overline{x}_i$ increases (and correlation between $r$ and $\overline{x}_i$ decreases). So we change the multiplier $\beta_i$ until the correlation between $r$ and $\overline{x}_i$ becomes equal to the correlation between $\overline{x}_j$ and $r$ for other feature $j$.
+	\item Now our hypothesis is $h(x)=\beta_1+\beta_2(\pm\overline{x}_i\pm\overline{x}_j)$ (plus if correlation between $\overline{x}_i$ and $r$ is positive, minus if negative). Now we change $\beta_2$ until the correlation between $r=y-h(x)$ and $\overline{x}_i$ becomes equal to the correlation between $\overline{x}_l$ and $r$ for some third feature $l$. And so on.
+	\item Finally we find optimal $h(x)$.
+\end{enumerate}
+
+\subsubsection*{Elastic Net}
+
+Elastic Net is a sum of $L_1$ term and $L_2$ term:
+$$E(w)=\frac{2}{2N}\|Xw-y\|_2^2+\frac{1}{2}\alpha(1-l)\|w\|_2^2+\alpha l\|w\|_1$$
+
+\subsubsection*{Support vector regression machine}
+
+SVM tries to find such line, that most points are out of margin. Now we reverse the task and we want to find such line, that most of points are in the margin [pic.]. So we have this optimization task:
+$$\begin{cases}
+	\frac{1}{2}\|w\|^2+C\sum(\xi_i+\xi_i^*)\to min \\
+	y_i-w^Tx_i-b\le\epsilon+\xi_i \\
+	w^Tx_i+b-y_i\le\epsilon+\xi_i^* \\
+	\xi_i,xi_i^* \ge \epsilon \\
+\end{cases}$$
+where $\epsilon$ is the size of the margin, <...>
+
+\subsubsection*{$R^2$ score}
+
+$R^2$ score is an useful metric for regression:
+$$R^2=1-\frac{u}{v}$$
+where
+$$u=\sum\limits_{i=1}^{N}(h(x_i)-y_i)^2\qquad v=\sum\limits_{i=1}^{N}(\overline{y}-y_i)^2\qquad \overline{y}=\frac{1}{N}\sum\limits_{i=1}^{N}y_i$$
