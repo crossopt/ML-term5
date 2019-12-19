@@ -1,1 +1,66 @@
 \chapter{Introduction}
+
+{\sf What is machine learning? The good answer is <<noone knows>>. However, we know whether or not this particular thing is machine learning or not. Another answer was proposed in the 90's by Arthur Samuel, one of the fathers of machine learning:
+\begin{displayquote}
+  \glqq It is a field of study that gives the ability to the computer to self-learn without being explicitly programmed.\grqq
+  \begin{flushright}
+  	A.L. Samuel
+  \end{flushright}
+\end{displayquote}
+}
+
+\section{Types of Machine Learning}
+
+Here we can see some classification of mahine learning situations:
+\begingroup
+	\def\arraystretch{2}
+	\begin{figure}[H]
+		\centering
+		\begin{tabular}{|c|c|c|} 
+			\hline
+			{\bf Type} & {\bf Small data} & {\bf Big data} \\
+			\hline
+			{\bf Panel data} & kNN, SVM, linear regression & boosted decision trees \\
+ 			\hline
+ 			{\bf Images, sound, text} & deep learning with tricks & deep learning \\
+	 		\hline
+	 		{\bf Cluster analysis} & something strange & clustering methods \\
+	 		\hline
+	 		{\bf Optimization} & Bayesian optimization & hill climb, annealing, GA\\
+	 		\hline
+	 		{\bf Agent systems} & q-learning & deep RL \\
+ 			\hline
+		\end{tabular}
+	\end{figure}
+\endgroup
+So the focus of this cource is practical knowledge. There is some theory to machine learning and in most situations theory doesn't work. <<Theory doesn't work>> means <<theory won't tell you what method is the best for particular task>>. Theoreticaly we can say that some method is better than other with probability 51\% but for particular task we may not know what method is the best. So you should know most of the algorithms and apply all of them for your task to find the optimal one.\\
+Also there is an another classification of machine learning tasks -- classification by a data structure.
+
+\subsubsection*{Supervised learning}
+
+We have some dataset and we have superviser what tells us <<what is what>>, for example, we have some dataset of handwritten digits and superviser parces this digits. So we have:
+\begin{enumerate}[label=$\bullet$]
+	\item $X$ -- input elemets
+	\item $y$ -- output (or label)
+	\item $f\colon X\to Y$ -- target function what we are trying to predict.
+	\item $D=\{(x_1,y_1),\ldots(x_N,y_N)\}$ -- data for training. $x_i$ is the vector (for example, values of the pixel of the image), $y_i$ is the label of element $x_i$.
+	\item $h\colon X\to Y$ -- hypothesis, the answer of our algorithm.
+\end{enumerate}
+Classification problem -- $y$ belongs to a set of classes.\\
+Regression problem -- $y$ is a real valued number (or a vector).
+
+\subsubsection*{Unsupervised learning}
+
+Unsupervised learning is when you have only the datapoints $X$ and you want to extract some information, to get some insight into data structure, to get dependences or just for compressing. 
+
+\subsubsection*{Semi-supervised learning}
+
+Let's imagine you have some vector space and you have two data points: black and white. And you want to predict color for other points.
+
+\subsubsection*{Active learning}
+
+It is like semi-supervised learning, but we can ask for more labels but do it on a budget.
+
+\subsubsection*{Reinforcement learning}
+
+You don't have the dataset, you only have an environment and an agent that interacts with this environment and receives some revard. The task is find the best strategy for that environment.
