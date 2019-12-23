@@ -38,12 +38,13 @@ Also there is an another classification of machine learning tasks -- classificat
 
 \subsubsection*{Supervised learning}
 
-We have some dataset and we have superviser what tells us <<what is what>>, for example, we have some dataset of handwritten digits and superviser parces this digits. So we have:
+We have some dataset and we have superviser what tells us <<what is what>>, for example, we have some dataset of handwritten digits and superviser parses this digits. \\
+So we have:
 \begin{enumerate}[label=$\bullet$]
-	\item $X$ -- input elemets
+	\item $x$ -- input point
 	\item $y$ -- output (or label)
 	\item $f\colon X\to Y$ -- target function what we are trying to predict.
-	\item $D=\{(x_1,y_1),\ldots(x_N,y_N)\}$ -- data for training. $x_i$ is the vector (for example, values of the pixel of the image), $y_i$ is the label of element $x_i$.
+	\item $D=\{(x_1,y_1),\ldots(x_N,y_N)\}$ -- data for training; $x_i$ is the vector (for example, values of the pixel of the image), $y_i$ is the label of element $x_i$.
 	\item $h\colon X\to Y$ -- hypothesis, the answer of our algorithm.
 \end{enumerate}
 Classification problem -- $y$ belongs to a set of classes.\\
@@ -68,9 +69,8 @@ You don't have the dataset, you only have an environment and an agent that inter
 \section{Instance-Based Learning}
 
 In instance-based learning (also lazy learning) class $y$ of point $x$ will be
-$$h(x, D)=\arg\max\limits_{y\in Y}\underbrace{\sum\limits_{x_i\in D}\mathbb{1}(y=y_i)\cdot w(x,y)}_{\Gamma_y(x)}$$
-where $D$ is our dataset, $w(x_i,x)$ weight of point $x_i$ for point $x$ (for example, distance between $x$ and $x_i$), $\Gamma_y(x)$ -- afinity of $x$ to class $y$). \\
-
+$$h(x, D)=\arg\max\limits_{y\in Y}\Gamma_y(x), \qquad \Gamma_y(x)=\sum\limits_{x_i\in D}\mathbb{1}(y=y_i)\cdot w(x_i,x)$$
+where $D$ is our dataset, $w(x_i,x)$ weight of point $x_i$ for point $x$ (for example, distance between $x$ and $x_i$), $\Gamma_y(x)$ -- affinity of $x$ to class $y$.
 
 \subsubsection*{Classifier evaluation}
 
@@ -98,7 +98,7 @@ If we have some hyperparameters of our classifier (for example, the number of ne
 	\item Train classifier on other part (training dataset);
 	\item Optimize hyperparameters of classifier looking at the accuracy on the test dataset.
 \end{enumerate}
-If you have several different classifiers (and you want to find the best one for your task), it is a bad idea to compare them on a test dataset (what you used to find the best hyperparameters), because of overfiting. Put aside one more dataset (validation dataset).
+If you have several different classifiers (and you want to find the best one for your task), it is a bad idea to compare them on a test dataset (what you used to find the best hyperparameters), because of overfitting. Put aside one more dataset (validation dataset).
 
 \subsubsection*{Train/Validate/Test}
 
@@ -111,26 +111,20 @@ If you have several different classifiers (and you want to find the best one for
 
 \subsubsection*{Cross-validation}
 
-If you have a small dataset, you want to use all your dataset for training and all your dataset for testing. And what we do is we shuffle the dataset, separate it into five parts and we make five experiments on a same hyperparameters (on k'th experiment we use k'th part for testing and others for training) and the acuracy will be the average of accuracies of each experiment.
+If you have a small dataset, you want to use all your dataset for training and all your dataset for testing. And what we do is we shuffle the dataset, separate it into five parts and we make five experiments with same classifier hyperparameters (in k'th experiment we use k'th part for testing and others for training) and the acuracy will be the average of accuracies of each experiment.
 
 \subsubsection*{Pareto efficiency}
 
 Let's imagine we have some various classifiers and let's look on theirs presicion and recall [pic.]. A classifier is Pareto efficient if there is no better classifier in terms of both presicion and recall (red points and point $N$). The red points are the first Pareto frontiers (point $N$ is one of the second Pareto frontiers, $K$ -- third).
 
-\subsubsection*{Presicion-recall and ROC curves}
-
-You can draw presicion-recall and ROC curves for several classifiers:\\
-{\it <Pics.>} \\
-AUC is the Area Under the ROC Curve.
-
 \subsubsection*{Scalers}
 
-If one feature goes from 0 to 1000 and the second feature goes to 0 to 1, then when we calculate distances betwween points we will use only first feature. To fight that we can use scalers:
+If one feature goes from 0 to 1000 and the second feature goes from 0 to 1, then when we calculate distances between points, we will use only first feature. To fight that we can use scalers:
 \begin{enumerate}[label=$\bullet$]
-	\item MinMax scaler: $$x_{scaled}=\frac{x-\min(x)}{\max(x)-\min(x)}$$
-	\item MaxAbs scaler: $$x_{scaled}=\frac{x}{\max(|x|)}$$
-	\item Standart scaler: $$x_{scaled}=\frac{x-\text{mean}(x)}{\text{std}(x)}$$ where std$(x)$ is the standart deviation.
-	\item Robust scaler: $$\frac{x-\text{median}(x)}{\text{percentile}_{0.75}(x)-\text{percentile}_{0.25}(x)}$$
+	\item MinMax scaler: $$x_{scaled}=\frac{x-\min(X)}{\max(X)-\min(X)}$$
+	\item MaxAbs scaler: $$x_{scaled}=\frac{x}{\max(|X|)}$$
+	\item Standart scaler: $$x_{scaled}=\frac{x-\text{mean}(X)}{\text{std}(X)}$$ where std$(X)$ is the standart deviation.
+	\item Robust scaler: $$\frac{x-\text{median}(X)}{\text{percentile}_{0.75}(X)-\text{percentile}_{0.25}(X)}$$
 	Robust scaler helps us to avoid points what are far from others.
 \end{enumerate}
 [Важное уточнение: если мы поделили датасет на две части (для обучения и для тестирования), то мы нормализуем не по всему набору данных, а отдельно для тестовой выборки и отдельно для обучающей.]
@@ -141,15 +135,15 @@ Prototype selection is calculating $h(x_i, D)$ not over all dataset $D$ but rath
 \begin{enumerate}
 	\item Start with the full dataset.
 	\item Sort data points, for example, by the number of neighbors from the other class.
-	\item Go in the ascending order. Delete point $x$ if that does not increase the LOO error for the points that consider $x$ onde of their closest neighbors.
+	\item Go in the ascending order. Delete point $x$ if that does not increase the LOO error for the points that consider $x$ one of their closest neighbors.
 \end{enumerate}
 This is the result of DROP5 work:\\
 {\it <Pics.>}
 
 \section{kNN}
 
-In kNN (k-nearest neighbors) we are trying to minimize
-$$h_k(x, D)=\arg\max\limits_{y\in Y}\underbrace{\sum\limits_{x_i\in D}\mathbb{1}(y=y_i)\cdot w_k(x,y)}_{\Gamma_y(x)}$$
+In kNN (k-nearest neighbors)
+$$h_k(x, D)=\arg\max\limits_{y\in Y}\sum\limits_{x_i\in D}\mathbb{1}(y=y_i)\cdot w_k(x_i,x)$$
 $$w_k(x_i,x)=\begin{cases}
 	1, & \text{if $x_i$ -- one of the k nearest neighbors of $x$} \\
 	0. & \text{otherwise}
@@ -163,23 +157,23 @@ $$w_k(x_i,x)=\begin{cases}
 $$
 Actually we don't need a metric space, we only need $\rho(x_i, x)$ (distance between $x_i$ and $x$) to be defined. \\
 And the way to evaluate how we are performing is to calculate leave-one-out-error:
-$$LOO(k,D)=\frac{1}{|D|}\sum\limits_{x_i\in D}\mathbb{1}(h_k(x_i,D\{x_i\})\ne y_i)$$
+$$LOO(k,D)=\frac{1}{|D|}\sum\limits_{x_i\in D}\mathbb{1}(h_k(x_i,D\backslash\{x_i\})\ne y_i)$$
 
 \subsubsection*{WkNN}
 
 Also we can use some other functions $w(x_i,x)=K(\rho(x_i,x)/r)$:
-$$K=\frac{r-\rho(x_i,x)}{r}$$
+$$K=\max\Big(\frac{r-\rho(x_i,x)}{r}, 0\Big)$$
 $$K=q^{-\rho(x_i,x)}$$
 where $r$ is some constant. We can define $r$ as a distance between $x$ and it's $(k+1)$ nearest neighbor.\\
 Also there is a potential energy method:
 $$h(x, D)=\arg\max\limits_{y\in Y}\sum\limits_{x_i\in D}\mathbb{1}(y=y_i)\cdot\gamma_i K\left(\frac{\rho(x_i,x)}{r_i}\right)$$
-where $\gamma_i$ some weight of point $x_i$, $r_i$ (influence range of point $x_i$) -- some constant. So we initialize $\gamma_i=0$ and after each step we change $\gamma_i$ ($\gamma_i\to\gamma_i+1$) if $h(x_i, D)\ne y_i$. And after some steps we stop.
+where $\gamma_i$ is some weight of point $x_i$, $r_i$ (influence range of point $x_i$) -- some constant. So we initialize $\gamma_i=0$ and after each step we change $\gamma_i$ ($\gamma_i\to\gamma_i+1$) if $h(x_i, D)\ne y_i$. And after some steps we stop.
 
 \subsubsection*{Step-wise kNN}
 
-If points of our dataset are from a big dimensional space, the euclidian distances between points may be huge. And if we also want to use kNN, the way to do it is step-wise kNN:
+If points of our dataset are from a big dimensional space, the euclidian distances between points may be huge. And if we also want to use kNN, the way to do it is the step-wise kNN:
 \begin{enumerate}
 	\item Select the best feature $k$ (what gives the best kNN result). Now we define the distance $\rho(x_i, x_j)$ between points $x_i$ and $x_j$ as the distance $\rho_k(x_i,x_j)$ between their k'th features.
 	\item Find another best feature $k'$ and the weight $w_{k'}$ (what gives the best kNN result). Now we redefine $\rho(x_i,x_j)=\rho(x_i,x_j)+w_{k'}\rho_{k'}(x_i,x_j)$.
-	\item Repeat second step while the LOO is decreasing (or accuracy is increasing).
+	\item Repeat second step while the LOO is decreasing (or the accuracy is increasing).
 \end{enumerate}
