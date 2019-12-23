@@ -113,9 +113,19 @@ If you have several different classifiers (and you want to find the best one for
 
 If you have a small dataset, you want to use all your dataset for training and all your dataset for testing. And what we do is we shuffle the dataset, separate it into five parts and we make five experiments with same classifier hyperparameters (in k'th experiment we use k'th part for testing and others for training) and the acuracy will be the average of accuracies of each experiment.
 
+\newpage
 \subsubsection*{Pareto efficiency}
 
-Let's imagine we have some various classifiers and let's look on theirs presicion and recall [pic.]. A classifier is Pareto efficient if there is no better classifier in terms of both presicion and recall (red points and point $N$). The red points are the first Pareto frontiers (point $N$ is one of the second Pareto frontiers, $K$ -- third).
+\begin{wrapfigure}{r}{0.25\linewidth}
+	\vspace{-1.25cm}
+  \begin{center}
+    \includegraphics[width=\linewidth]{1a.png}
+  \end{center}
+  \vspace{-0.8cm}
+  \caption*{(1.1) Pareto efficiency}
+  \vspace{-1cm}
+\end{wrapfigure}
+Let's imagine we have some various classifiers and let's look on theirs presicion and recall [pic. 1.1.]. A classifier is Pareto efficient if there is no better classifier in terms of both presicion and recall (red points and point $N$). The red points are the first Pareto frontiers (point $N$ is one of the second Pareto frontiers, $K$ -- third).
 
 \subsubsection*{Scalers}
 
@@ -132,13 +142,23 @@ If one feature goes from 0 to 1000 and the second feature goes from 0 to 1, then
 \subsubsection*{DROP5}
 
 Prototype selection is calculating $h(x_i, D)$ not over all dataset $D$ but rather its subset $\Omega$. How we should select that subset? There are a lot methods and one of most popular is DROP5 (Decremental Reduction Optimization Procedure):
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[c]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{1b.png}
+    \caption*{Dataset}
+  \end{subfigure}
+  \hspace{2cm}
+  \begin{subfigure}[c]{0.3\linewidth}
+    \includegraphics[width=\linewidth]{1c.png}
+    \caption*{After DROP5}
+  \end{subfigure}
+\end{figure}
 \begin{enumerate}
 	\item Start with the full dataset.
 	\item Sort data points, for example, by the number of neighbors from the other class.
 	\item Go in the ascending order. Delete point $x$ if that does not increase the LOO error for the points that consider $x$ one of their closest neighbors.
 \end{enumerate}
-This is the result of DROP5 work:\\
-{\it <Pics.>}
 
 \section{kNN}
 
@@ -162,8 +182,7 @@ $$LOO(k,D)=\frac{1}{|D|}\sum\limits_{x_i\in D}\mathbb{1}(h_k(x_i,D\backslash\{x_
 \subsubsection*{WkNN}
 
 Also we can use some other functions $w(x_i,x)=K(\rho(x_i,x)/r)$:
-$$K=\max\Big(\frac{r-\rho(x_i,x)}{r}, 0\Big)$$
-$$K=q^{-\rho(x_i,x)}$$
+$$K=\max\Big(\frac{r-\rho(x_i,x)}{r}, 0\Big)\qquad K=q^{-\rho(x_i,x)}$$
 where $r$ is some constant. We can define $r$ as a distance between $x$ and it's $(k+1)$ nearest neighbor.\\
 Also there is a potential energy method:
 $$h(x, D)=\arg\max\limits_{y\in Y}\sum\limits_{x_i\in D}\mathbb{1}(y=y_i)\cdot\gamma_i K\left(\frac{\rho(x_i,x)}{r_i}\right)$$
