@@ -62,3 +62,37 @@ These metrics help us to answer the question <<How well we clusterize?>>:
 	\item Purity: $$\frac{1}{|D|}\sum\limits_{C_i}\max\limits_{y}|x_j\in C_i,\ y_j=y|$$
 	\item Classification metrics.
 \end{enumerate}
+
+\section{Comparison of Algorithms}
+
+\begingroup
+	\def\arraystretch{1.5}
+	\begin{figure}[H]
+		\centering
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			K-Means & Mean Shift & \multicolumn{2}{|c|}{Agglomerative Clustering} & DBSCAN \\
+			\cline{3-4}
+			& & Variance & Average & \\
+			\hline
+			\includegraphics[width=0.15\linewidth]{2a.png} &
+			\includegraphics[width=0.15\linewidth]{2b.png} &
+			\includegraphics[width=0.15\linewidth]{2c.png} &
+			\includegraphics[width=0.15\linewidth]{2d.png} &
+			\includegraphics[width=0.15\linewidth]{2e.png} \\
+			\hline
+			\includegraphics[width=0.15\linewidth]{2f.png} &
+			\includegraphics[width=0.15\linewidth]{2g.png} &
+			\includegraphics[width=0.15\linewidth]{2h.png} &
+			\includegraphics[width=0.15\linewidth]{2i.png} &
+			\includegraphics[width=0.15\linewidth]{2j.png} \\
+			\hline
+			\includegraphics[width=0.15\linewidth]{2k.png} &
+			\includegraphics[width=0.15\linewidth]{2l.png} &
+			\includegraphics[width=0.15\linewidth]{2m.png} &
+			\includegraphics[width=0.15\linewidth]{2n.png} &
+			\includegraphics[width=0.15\linewidth]{2o.png} \\
+			\hline
+		\end{tabular}
+	\end{figure}
+\endgroup
