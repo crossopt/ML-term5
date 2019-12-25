@@ -1,6 +1,6 @@
 \chapter{Regression}
 
-{\sf The regression problem is the problem of minimization the sum of the squared distances between our hypothesis $h(x)$ and value $f(x)$ of datapoint $x$ ($f(x_i)$ is a label $y_i$ of a point $x_i$).}
+{\sf The regression problem is the problem of minimization of the sum of the squared distances between our hypothesis $h(x)$ and value $f(x)$ of datapoint $x$ ($f(x_i)$ is a label $y_i$ of a point $x_i$).}
 
 \section{Linear and Polynomial Regression}
 \vspace{-0.6cm}
@@ -14,7 +14,7 @@
   \vspace{-0.8cm}
   \caption*{(12.1) Linear regression}
 \end{wrapfigure}
-In case of linear regression we want to find optimal linear $h(x)$ ([pic. 12.1] is an example with datapoints from $\mathbb{R}$). The linear function regression corresponds to equation $h(x_i)=w^Tx_i$ (where datapoint $x_i=(a_1,\ldots,a_n)^T$ replaced by point $(1, a_1,\ldots,a_n)^T$). So we want to minimize the error $E(w)$ defined as \hyperlink{ein_and_eout}{error in sample} $E_{in}(h)$:
+In the case of linear regression we want to find  an optimal linear $h(x)$ ([pic. 12.1] is an example with datapoints from $\mathbb{R}$). The linear function regression corresponds to the equation $h(x_i)=w^Tx_i$ (where datapoint $x_i=(a_1,\ldots,a_n)^T$ replaced by point $(1, a_1,\ldots,a_n)^T$). So we want to minimize the error $E(w)$ defined as \hyperlink{ein_and_eout}{error in sample} $E_{in}(h)$:
 $$E(w)=E_{in}(h)=\frac{1}{N}\sum\limits_{i=1}^{N}(h(x_i)-f(x_i))^2=\frac{1}{N}\sum\limits_{i=1}^{N}(w^Tx_i-y_i)^2=\frac{1}{N}\|Xw-y\|_2^2$$
 where
 $$X=\begin{pmatrix}
@@ -31,7 +31,7 @@ $$X=\begin{pmatrix}
 	\end{pmatrix}$$
 And the solution is
 $$\nabla E(w)=\frac{2}{N}\cdot X^T(Xw-y)=0\Rightarrow X^TXw=X^Ty\Rightarrow w=(X^TX)^{-1}X^Ty$$
-Why the found solution is the minumum, not the maximum? Well, because $E(w)$ is the square of some value.
+Why is the found solution the minumum and not the maximum? Well, because $E(w)$ is the square of some value.
 
 \subsubsection*{Polynomial regression}
 
@@ -44,17 +44,17 @@ Why the found solution is the minumum, not the maximum? Well, because $E(w)$ is 
   \caption*{(12.2) Overfitting}
   \vspace{-2cm}
 \end{wrapfigure}
-Polinomial regression is like the linear regression with polinomial features. For example:
+Polynomial regression is like a linear regression with polynomial features. For example:
 $$x_i\in\mathbb{R},\ x_i\to(1,x_i,x_i^2)^T \qquad
 x_i\in\mathbb{R}^2,\ (a_1, a_2)^T\to(1,a_1,a_2,a_1^2,a_2^2,a_1a_2)^T$$
-But when we increase the dimensionality of our space, we can owerfit [pic. 12.2]. How do we fight that?
+But when we increase the dimensionality of our space, we can overfit [pic. 12.2]. How do we fight that?
 
 \newpage
 \section{Theory of Error for Regression}
 \vspace{-0.6cm}
 \subsubsection*{Sine target function}
 
-This is a simple example of linear regression of sine function:
+This is a simple example of linear regression of the sine function:
 \begin{figure}[H]
   \centering
   \begin{subfigure}[c]{0.25\linewidth}
@@ -85,11 +85,11 @@ The error out of sample for the first hypothesis is $0.5$ and for the second is 
     \caption*{(12.5) Bad linear hypotheses}
   \end{subfigure}
 \end{figure}
-The error in sample for the first hypothesis is greater than zero and for the second is zero. However in the second case there is some datasets where we have big error out of sample [pic. 12.5]. To approach the theory of that we introduce mean hypothesis.
+The error in sample for the first hypothesis is greater than zero and for the second it is zero. However in the second case there are some datasets where we have a big error out of sample [pic. 12.5]. To approach the theory of that we introduce the mean hypothesis.
 
 \subsubsection*{Mean hypothesis}
 
-The error out of sample for some hypothesis $h_D$ what trained on a dataset $D$ is
+The error out of sample for some hypothesis $h_D$ when trained on a dataset $D$ is
 $$E_{out}(h_D)=\mathbb{E}_X\left(\left(h_D(x)-f(x)\right)^2\right)$$
 [Если вы забыли, что тут происходит, смотрите \hyperlink{ein_and_eout}{error out of sample}.] Now let's find the expectation of $E_{out}$ over all datasets:
 $$\mathbb{E_D}\left(E_{out}(h_D)\right)=\mathbb{E}_D\left(\mathbb{E}_X\left(\left(h_D(x)-f(x)\right)^2\right)\right)=\mathbb{E}_X\left(\mathbb{E}_D\left(\left(h_D(x)-f(x)\right)^2\right)\right)$$
@@ -109,7 +109,7 @@ $$=\mathbb{E}_X(variance(x)+bias(x))=bias+variance$$
 where
 $$bias=\mathbb{E}_X\left(\left(\overline{h}(x)-f(x)\right)^2\right)$$
 $$variance=\mathbb{E}_X\left(\mathbb{E}_D\left(\left(h_D(x)-\overline{h}(x)\right)^2\right)\right)$$
-What does that values mean? Blue points are dataset, the hypothesis is <<points in the red circle>>:
+What do those values mean? The blue points are the dataset, the hypothesis is <<points in the red circle>>:
 \begin{figure}[H]
   \centering
   \begin{tabular}{cccc}
@@ -121,7 +121,7 @@ What does that values mean? Blue points are dataset, the hypothesis is <<points 
     low variance & high variance & low variance & high variance \\
   \end{tabular}
 \end{figure}
-So the error is low when bias and variance (almost) equal [pic. 12.6].\\
+So the error is low when bias and variance are (almost) equal [pic. 12.6].\\
 Here ([pic. 12.7] and [pic. 12.8]) we can see some values of bias and variance for sine target function:
 \begin{figure}[H]
   \centering
@@ -143,7 +143,7 @@ Here ([pic. 12.7] and [pic. 12.8]) we can see some values of bias and variance f
 
 \section{Regularization}
 
-One of the ways to prevent overfitting is the regularization. And for regression the first way to regularize is using $L_2$ regularization.
+One of the ways to prevent overfitting is regularization. And for regression the first way to regularize is using $L_2$ regularization.
 
 \subsubsection*{$L_2$ regularization}
 
@@ -165,11 +165,11 @@ Choosing $\alpha$ we have:
   \end{subfigure}
   \vspace{-0.4cm}
 \end{figure}
-Big $\alpha$ ($\approx1$) is underfit because algorithms tries to made weights small rather than fitting the function.
+Big $\alpha$ ($\approx1$) is underfit because the algorithm tries to made weights small rather than fitting the function.
 
 \subsubsection*{LASSO and $L_1$ regularization}
 
-If our feature space is greater than dataspace, we want to ignore some number of features. In that case we use LASSO (Least Absolute Shrinkage and Selection Operator). LASSO is the method what limits norm of the $w$ which makes some coefficients equal to zero. The way to do it is the $L_1$ regularization:
+If our feature space is greater than our dataspace, we want to ignore some of our features. In that case we use LASSO (Least Absolute Shrinkage and Selection Operator). LASSO is a method which limits the norm of $w$, which makes some coefficients equal to zero. The way to do it is the $L_1$ regularization:
 $$E(w)=\frac{1}{N}\|Xw-y\|_2^2+\frac{\alpha}{N}\|w\|_1$$
 Now we can't optimize $E(w)$ in one step because we can't just find the derivative. So for that we use LARS (Least Angle Regression).
 
@@ -177,8 +177,8 @@ Now we can't optimize $E(w)$ in one step because we can't just find the derivati
 
 Let's define $\overline{x}_i$ as a vector of the i'th features of all points from the dataset (i'th column of matrix $X$). $y$ is still the vector of labels.
 \begin{enumerate}
-	\item We find the feature $\overline{x}_i$ what correlates most with $y$, i.e. we find such $\overline{x}_i$ that the angle between $y$ and $\overline{x}_i$ is the smallest.
-	\item Now our hypothesis is $h(x)=\pm\beta_1\overline{x}_i$ (plus if correlation between $\overline{x}_i$ and $r$ is positive, minus if it's negative). If we increase $\beta_1$, the angle between residial $r=y-h(x)$ and $\overline{x}_i$ will increase (and  the correlation between $r$ and $\overline{x}_i$ will decrease). So we change the multiplier $\beta_1$ from zero until the correlation between $r$ and $\overline{x}_i$ becomes equal to the correlation between $\overline{x}_j$ and $r$ for other feature $j$.
+	\item We find the feature $\overline{x}_i$ which correlates most with $y$, i.e. we find such $\overline{x}_i$ that the angle between $y$ and $\overline{x}_i$ is the smallest.
+	\item Now our hypothesis is $h(x)=\pm\beta_1\overline{x}_i$ (plus if correlation between $\overline{x}_i$ and $r$ is positive, minus if it's negative). If we increase $\beta_1$, the angle between the residual $r=y-h(x)$ and $\overline{x}_i$ will increase (and  the correlation between $r$ and $\overline{x}_i$ will decrease). So we change the multiplier $\beta_1$ from zero until the correlation between $r$ and $\overline{x}_i$ becomes equal to the correlation between $\overline{x}_j$ and $r$ for some other feature $j$.
 	\item Now our hypothesis is $h(x)=\pm\beta_1\overline{x}_1\pm\beta_2(\overline{x}_i+\overline{x}_j)$ (plus if correlation between $\overline{x}_i$ and $r$ is positive, minus if it's negative). Now we increase $\beta_2$ until the correlation between $r=y-h(x)$ and $\overline{x}_i$ becomes equal to the correlation between $\overline{x}_l$ and $r$ for some third feature $l$. Then our hypothesis will be $h(x)=\pm\beta_1\overline{x_i}\pm\beta_2(\overline{x}_i+\overline{x}_j)\pm\beta_3(\overline{x}_i+\overline{x}_j+\overline{x}_l)$... And so on.
 	\item Finally we find optimal $h(x)$.
 \end{enumerate}
@@ -199,7 +199,7 @@ $$E(w)=\frac{1}{N}\|Xw-y\|_2^2+\frac{\alpha(1-l)}{N}\|w\|_2^2+\frac{\alpha l}{N}
   \caption*{(12.9) SVRM}
   \vspace{-1cm}
 \end{wrapfigure}
-SVM tries to find such line, that most points are out of margin. Now we reverse the task and we want to find such line, that most of points are in the margin [pic.~12.9]. So we have this optimization task:
+SVM tries to find such a line for which most points are out of the margin. Now we reverse the task and we want to find such a line for which most of points are in the margin [pic.~12.9]. So we have this optimization task:
 $$\begin{cases}
 	\frac{1}{2}\|w\|^2+C\sum(\xi_i+\xi_i^*)\to min \\
 	y_i-w^Tx_i-b\le\varepsilon+\xi_i \\
@@ -241,7 +241,7 @@ Let's take a subset of all points and train some number of models in that subset
   \caption*{(12.11) RANSAC}
   \vspace{-1cm}
 \end{wrapfigure}
-It's simular to Theil-Sen regressor: we build models on subsets of dataset. But after that we pick the best one in terms of the number of inliers (not noise points) and train a new one on all theese inliers [pic. 12.11].
+It's similar to the Theil-Sen regressor: we build models on subsets of our dataset. But after that we pick the best one in terms of the number of inliers (not noise points) and train a new one on all these inliers [pic. 12.11].
 
 \subsubsection*{Huber regressor} 
 
@@ -253,7 +253,7 @@ $$H_m(z)=\begin{cases}
 	z^2, & \text{if } |z|<\varepsilon \\
 	2\varepsilon|z|-\varepsilon^2, & \text{if } |z|\ge\varepsilon
 \end{cases}$$
-The idea of $H_m(z)$ is the far points increase the value of the error error much more smoothly than in MSE.
+The idea of $H_m(z)$ is that the far points increase the value of the error much more smoothly than in MSE.
 
 \subsubsection*{Comparison of the methods}
 
