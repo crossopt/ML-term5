@@ -179,4 +179,8 @@ $$E_{gen}\le\frac{|\{x\colon x \text{ is a support vector}\}|}{|\{x\colon x \tex
 
 \section{Multi-class SVM}
 
-[Вы просто сводите к задаче бинарной классификации: сначала отделяете один класс от всех, затем другой и т.д. Тем самым вы получаете для каждого класса свой SVM, который сообщает, принадлежит точка этому классу или нет.]
+We have $n$ classes $C_1, C_2, \ldots C_n$. SVM can separate only two sets, so we build $n$ SVMs, each tries to separate $i$-th class from all the others. Let $w_i, b_i$ be the vector of weights and constant of $i$-th SVM. If $w_i^T x - b_i > 0$ then that SVM thinks that $x$ is in class $C_i$.
+
+If exactly one of machines deems $x$ to be in it's class, then it's easy. However often it is not the case. 
+
+So what do we do? We use the fact that SVMs don't just give binary answer, but also have express sort of confidence in it. That is, we pick $\underset{i}{\operatorname{argmax}}\ w_i^T x - b_i$
